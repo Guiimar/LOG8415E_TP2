@@ -10,8 +10,6 @@ def resource_ec2(aws_access_key_id, aws_secret_access_key, aws_session_token):
                        aws_secret_access_key=aws_secret_access_key ,
                       aws_session_token= aws_session_token) 
     
-
-    
     return(ec2_serviceresource)
 
 #Function to create a service client for ec2
@@ -100,85 +98,3 @@ def create_instance_ec2(num_instances,ami_id,
         #print(f'{instances[i]} is starting')
    
     return instances
-
-#Function to create target groups : 
-def create_target_group(targetname,vpc_id,port, elbv2_serviceclient):
-    tg_response=elbv2_serviceclient.create_target_group(
-        Name=targetname,
-        Protocol='HTTP',
-        Port=port,
-        VpcId=vpc_id,
-        TargetType ='instance'
-    )
-    target_group_arn = tg_response["TargetGroups"][0]["TargetGroupArn"]    
-    return target_group_arn
-
-#Function to register targets in target groups : 
-def register_targets(elbv2_serviceclient,instances_ids,target_group_arn):
-    targets=[]
-    for instance_id in instances_ids:
-        targets.append({"Id":instance_id,"Port":80})
-
-    tg_registered=elbv2_serviceclient.register_targets(
-        TargetGroupArn=target_group_arn,
-        Targets=targets
-    )
-    return tg_registered
-
-#Function to create load balancer : 
-def create_load_balancer(elbv2_seviceclient,LB_name,subnets,security_group):
-    response = elbv2_seviceclient.create_load_balancer(
-        Name=LB_name,
-        Subnets=subnets,
-        SecurityGroups=[security_group]
-                )
-    load_balancer_arn = response["LoadBalancers"][0]["LoadBalancerArn"]
-  
-    return load_balancer_arn
-
-#Function to create listeners:
-def create_listener(elbv2_seviceclient,load_balancer_arn):
-        response_listener=elbv2_seviceclient.create_listener(
-        LoadBalancerArn=load_balancer_arn,
-        Port=80,
-        Protocol='HTTP',
-        DefaultActions=[
-            {
-            'Type':'fixed-response',
-            'FixedResponseConfig':{
-                'StatusCode': '200',
-                'ContentType':'text/plain',
-                'MessageBody': 'ListenerLab'
-            }
-            }
-            ]
-        )
-        response_listener_arn=response_listener["Listeners"][0]["ListenerArn"]
-   
-        return response_listener_arn
-
-#Function to create listener rules
-def create_listener_rule(elbv2_seviceclient,listener_arn, target_group_arn, path,prio):
-        response = elbv2_seviceclient.create_rule(
-            ListenerArn=listener_arn,
-            Priority=prio,
-            Conditions=[
-                {
-                    'Field': 'path-pattern',
-                    'Values': [path]
-                }
-            ],
-            Actions=[
-                {
-                    'Type': 'forward',
-                    'ForwardConfig': {
-                        'TargetGroups': [{'TargetGroupArn': target_group_arn}]
-                    }
-                }
-            ]
-        )
-        response_rule_listener = response['Rules'][0]['RuleArn']
-        return response_rule_listener
-    
-
-
