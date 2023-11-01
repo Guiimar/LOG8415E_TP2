@@ -25,18 +25,6 @@ def client_ec2(aws_access_key_id, aws_secret_access_key, aws_session_token):
     
     return(ec2_serviceclient)
 
-#Function to create a service client for elbv2
-def client_elbv2(aws_access_key_id, aws_secret_access_key, aws_session_token):
-    elbv2_serviceclient =  boto3.client('elbv2',
-                       'us-east-1',
-                       aws_access_key_id= aws_access_key_id,
-                       aws_secret_access_key=aws_secret_access_key ,
-                      aws_session_token= aws_session_token) 
-    
-
-    
-    return(elbv2_serviceclient)
-
 #Function to create and check a KeyPair : 
 def create_keypair(key_pair_name, client):
     try:
