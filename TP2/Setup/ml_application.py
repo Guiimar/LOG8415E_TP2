@@ -1,8 +1,5 @@
-from flask import Flask,jsonify
-from transformers import DistilBertTokenizer,DistilBertForSequenceClassification
-import torch
-import random
-import string
+
+
 
 app=Flask(__name__)
 
