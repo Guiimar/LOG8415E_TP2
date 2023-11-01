@@ -27,9 +27,6 @@ if __name__ == '__main__':
     #Create ec2 client with our credentials:
     ec2_serviceclient = client_ec2(key_id, access_key, session_token)
     print("============> ec2 client creation has been made succesfuly!!!!<=================")
-    #Create elbv2 client with our credentials:
-    elbv2_serviceclient = client_elbv2(key_id, access_key, session_token)
-    print("============> elbv2 client creation has been made succesfuly!!!!<=================")
 
     #--------------------------------------Creating a keypair, or check if it already exists-----------------------------------
     
@@ -95,37 +92,7 @@ if __name__ == '__main__':
     #print(instances_m4)
     print("\n Instances created succefuly instance type  : m4.large")
 
-    #--------------------------------------Create Instances of cluster 2 -----------------------------------------------------------
 
-    # Create 4 instances with t2.large as intance type,
-    'By choice, we create the 4 EC2 instances for Cluster 2 in availability zones us-east-1c and us-east-1d'
-    Availabilityzons_Cluster2=['us-east-1c','us-east-1d','us-east-1c','us-east-1d']
-    instance_type = "t2.large"
-    print("\n Creating instances of Cluster 2 with type : t2.large")
-    instances_t2= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster2,ud)
-    #print(instances_t2)
-    print("\n Instances created succefuly instance type : t2.large")
-
-    
-    #--------------------------------------------Create Target groups ----------------------------------------------------------------
-
-    #Create the two targets groups (Clusters)
-    TargetGroup1_name='Cluster1-m4-large'
-    target_group_1=create_target_group(TargetGroup1_name,vpc_id,80, elbv2_serviceclient)
-    TargetGroup2_name='Cluster2-t2-large'
-    target_group_2=create_target_group(TargetGroup2_name,vpc_id,80, elbv2_serviceclient)
-    print("\nTarget groups created")
-
-    
-    #---------------------------------------------Register Targets on target groups --------------------------------------------------
-
-    #time to wait for update ec2 running status before registration in target groups
-    print("\nWaiting for EC2 instances to become on running status before registration in Target groups...")
-    time.sleep(180)
-    #Targets registration on target groups
-    register_targets(elbv2_serviceclient,instances_m4,target_group_1) 
-    register_targets(elbv2_serviceclient,instances_t2,target_group_2)
-    print("Targets registred")
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
 
@@ -141,29 +108,5 @@ if __name__ == '__main__':
     #Get mapping dictionary between Availability zones and subnets Ids
     mapping_AZ_subnetid={subnet['AvailabilityZone']:subnet['SubnetId'] for subnet in subnets_discription['Subnets']}
     mapping_AZ_subnetid
-
-
-    #--------------------------------------Create Load balancer with appropriate subnets ----------------------------------------------
-
-    #Define appropriate subnets associated with used availabilty zones
-    subnetsIds=[mapping_AZ_subnetid[AZ] for AZ in set(Availabilityzons_Cluster1).union(Availabilityzons_Cluster2)]
-    #Create Load balancer 
-    LoadBalancerName='OurALB'
-    load_balancerarn=create_load_balancer(elbv2_serviceclient,LoadBalancerName,subnetsIds,security_group_id)
-    print('Load balancer created')
-
-    #Create listeners listener
-    listener_group=create_listener(elbv2_serviceclient,load_balancerarn) 
-    print('Listener created')
-
-    #Create listeners rules
-    rules=[]
-    rule_list_1=create_listener_rule(elbv2_serviceclient,listener_group,target_group_1,'/cluster1',2)
-    rule_list_2=create_listener_rule(elbv2_serviceclient,listener_group,target_group_2,'/cluster2',3)
-    
-    rules.append(rule_list_1)
-    rules.append(rule_list_2)
-
-    print('Listner rules created')
     
     print('============================>SETUP ends')
