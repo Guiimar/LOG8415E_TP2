@@ -1,0 +1,46 @@
+
+{
+    "container1": {
+        "ip": "ip_of_worker_1",
+        "port": "5000",
+        "status": "free"
+    },
+    "container2": {
+        "ip": "ip_of_worker_1",
+        "port": "5001",
+        "status": "free"
+    },
+    "container3": {
+        "ip": "ip_of_worker_2",
+        "port": "5000",
+        "status": "free"
+    },
+    "container4": {
+        "ip": "ip_of_worker_2",
+        "port": "5001",
+        "status": "free"
+    },
+    "container5": {
+        "ip": "ip_of_worker_3",
+        "port": "5000",
+        "status": "free"
+    },
+    "container6": {
+        "ip": "ip_of_worker_3",
+        "port": "5001",
+        "status": "free"
+    },
+    "container7": {
+        "ip": "ip_of_worker_4",
+        "port": "5000",
+        "status": "free"
+    },
+    "container8": {
+        "ip": "ip_of_worker_4",
+        "port": "5001",
+        "status": "free"
+    }
+
+
+
+}
