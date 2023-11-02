@@ -69,7 +69,7 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
 
 #Function to create ec2 instances : 
 def create_instance_ec2(num_instances,ami_id,
-    instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons, user_data):
+    instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons,instance_function,user_data):
     instances=[]
     for i in range(num_instances):
         instance=ec2_serviceresource.create_instances(
@@ -80,21 +80,22 @@ def create_instance_ec2(num_instances,ami_id,
             MaxCount=1,
             Placement={'AvailabilityZone':Availabilityzons[i]},
             SecurityGroupIds=[security_group_id] if security_group_id else [],
-            UserData=user_data,
+            #UserData=user_data,
             TagSpecifications=[
                     {
                         'ResourceType': 'instance',
                         'Tags': [
                             {
                                 'Key': 'Name',
-                                'Value': 'lab1-ec2-instance-'+str(instance_type)+"-"+str(i + 1)
+                                'Value': 'lab2-'+str(instance_function)+"-"+str(i + 1)
                             },
                         ]
                     },
                 ]
         )
-        instances.append(instance[0].id)
-        print ('Instance: ',i+1,' having the Id: ',instance[0].id, ' in Availability Zone: ', Availabilityzons[i], 'is created')
+        #Addition create instances return the id and the ip
+        instances.append([instance[0].id,instance[0].private_ip_address])
+        print ('Instance: ',i+1,' having the Id: ',instance[0].id,'having the IP',instance[0].private_ip_address,'in Availability Zone: ', Availabilityzons[i], 'is created')
         #print(f'{instances[i]} is starting')
    
     return instances

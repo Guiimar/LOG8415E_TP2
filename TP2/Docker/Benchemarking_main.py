@@ -42,7 +42,8 @@ if __name__ == '__main__':
     Instances_Ids_TG1=[Instance['Target']['Id'] for Instance in elbv2_client.describe_target_health(TargetGroupArn=TargetGroups_arns_list[0])['TargetHealthDescriptions']]
     #Instances Ids of TG2
     Instances_Ids_TG2=[Instance['Target']['Id'] for Instance in elbv2_client.describe_target_health(TargetGroupArn=TargetGroups_arns_list[1])['TargetHealthDescriptions']]
-    print('\nAll Setup data are retrieved successfully')    
+    print('\nAll Setup data are retrieved successfully')
+        
     #------------------------------------------Sending requests -------------------------------------------------------------------
     time.sleep(120)
     print('\n=================================> Test Scenario Begins')

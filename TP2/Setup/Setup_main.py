@@ -3,13 +3,15 @@ import boto3
 from Setup_functions import *
 import base64
 import os
+import json
 
 
 if __name__ == '__main__':
     # Get credentials from the config file :
     path = os.path.dirname(os.getcwd())
+    #path=path+"\TP2"
     config_object = configparser.ConfigParser()
-    with open(path+"/credentials.ini","r") as file_object:
+    with open(path+"\credentials.ini","r") as file_object:
         config_object.read_file(file_object)
         key_id = config_object.get("resource","aws_access_key_id")
         access_key = config_object.get("resource","aws_secret_access_key")
@@ -74,11 +76,17 @@ if __name__ == '__main__':
     
 
     #--------------------------------------Pass flask deployment script into the user_data parameter ------------------------------
-    
-    with open('flask_deployment.sh', 'r') as f :
-        flask_script = f.read()
+    print("CHEMIN")
+    print(os.getcwd())
+    with open('flask_orchestrator.sh', 'r') as f :
+        flask_script_orchestrator = f.read()
 
-    ud = str(flask_script)
+    ud_orchestrator = str(flask_script_orchestrator)
+
+    with open('flask_workers.sh', 'r') as f :
+        flask_script_worker = f.read()
+
+    ud_workers = str(flask_script_worker)
 
 
     #--------------------------------------Create Instances of cluster 1 ------------------------------------------------------------
@@ -86,18 +94,31 @@ if __name__ == '__main__':
     # Create 5 instances with m4.large as instance type:
     Availabilityzons_Cluster1=['us-east-1a','us-east-1b','us-east-1a','us-east-1b','us-east-1a']
     instance_type = "m4.large"
-    print("\n Creating instances of Cluster 1 with type : m4.large")
+    print("\n Creating instances : the orchestrator and the workers ")
 
     #Creation of the orchestrator
-    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,ud)
+    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
     
     #Creation of the 4 workers
-    workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,ud)
-    
-    
+    workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
+    #print(workers_m4)
+
+    #Modifier le fichier test.json en fonction pour modifier les IP
+    with open("test.json","r") as f:
+            data=json.load(f)
+
+    #Partie qui modifie les ip dans le fichier test.json
+    container_count = 0
+    for i in range(len(workers_m4)):
+        for _ in range(2):
+            container_count += 1
+            container_id = "container" + str(container_count)
+            data[container_id]["ip"]=workers_m4[i][1]
+    with open ("test.json","w") as f:
+        json.dump(data,f)
+
     print("\n Orchestrator and the 4 workers successfuly")
-
-
+    
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
 

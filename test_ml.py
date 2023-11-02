@@ -14,6 +14,7 @@ def generate_random_text(length=50):
     return ''.join(random.choice(letters) for i in range(length))
 
 @app.route('/run_model',methods=['POST'])
+
 def run_model():
     input_text=generate_random_text()
     inputs=tokenizer(input_text,return_tensors='pt',padding=True,truncation=True)
