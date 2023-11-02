@@ -3,6 +3,7 @@ from transformers import DistilBertTokenizer,DistilBertForSequenceClassification
 import torch
 import random
 import string
+
 app=Flask(__name__)
 
 tokenizer=DistilBertTokenizer.from_pretrained('distilbert-base-uncased')

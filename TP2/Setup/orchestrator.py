@@ -9,8 +9,32 @@ request_queue=[]
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
     print(f"Sending request to{container_id} with data : {incoming_request_data}...")
-    ##COde to call instances
+
+    #Récupérer l'ip du container
+    with open("test.json","r") as f:
+            data=json.load(f)
+
+    container_ip=data[container_id]["ip"]
+    container_port=data[container_id]["port"]
+
+    try:
+        url="http://{}:{}/{}".format(container_ip, container_port,'/run_model')
+        #post pour transmettre la requête
+        response=requests.post(url,data=incoming_request_data)
+    except Exception as e:
+        print('Exception returned is',e)
+    if response.status_code == 200:
+        data = response.json()
+        input_text = data['input_text']
+        probabilities = data['probabilities']
+        print("Input Text:", input_text)
+        print("Probabilities:", probabilities)
+    else:
+        print("La requête a échoué. Code d'état du serveur :", response.status_code)
+
     print(f"Received response from{container_id}")
+
+
 
 def update_container_status(container_id,status):
     with lock:
