@@ -1,7 +1,7 @@
 import configparser
 import boto3
 import time
-
+import requests
 #Function to create a service resource for ec2: 
 def resource_ec2(aws_access_key_id, aws_secret_access_key, aws_session_token):
     ec2_serviceresource =  boto3.resource('ec2',
@@ -99,3 +99,19 @@ def create_instance_ec2(num_instances,ami_id,
         #print(f'{instances[i]} is starting')
    
     return instances
+
+#Function to send request (to orchestrator)
+def send_request_to_orchestrator(ip,port,data):
+    try:
+        url="http://{}:{}/{}".format(ip, port,'/new_request')
+        #post pour transmettre la requête
+        response=requests.post(url,data=data)
+    except Exception as e:
+        print('Exception returned is',e)
+
+
+def send_thread(ip,port,data,number_requests):
+    print('Starting sending requests of Thread to orchestrator')
+    for _ in range(number_requests):
+        send_request_to_orchestrator(ip,port,data)
+    print('Finished sending requests of Thread to orchestrator')

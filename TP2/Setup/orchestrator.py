@@ -59,7 +59,8 @@ def process_request(incoming_request_data):
         )
         update_container_status(free_container,"free")
     else:
-        request_queue.append(incoming_request_data)
+        #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
+        request_queue.append(incoming_request_data)    
 
 @app.route("/new_request",methods=["POST"])
 def new_request():

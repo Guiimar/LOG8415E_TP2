@@ -4,7 +4,7 @@ from Setup_functions import *
 import base64
 import os
 import json
-
+from threading import Thread
 
 if __name__ == '__main__':
     # Get credentials from the config file :
@@ -76,8 +76,6 @@ if __name__ == '__main__':
     
 
     #--------------------------------------Pass flask deployment script into the user_data parameter ------------------------------
-    print("CHEMIN")
-    print(os.getcwd())
     with open('flask_orchestrator.sh', 'r') as f :
         flask_script_orchestrator = f.read()
 
@@ -118,7 +116,14 @@ if __name__ == '__main__':
         json.dump(data,f)
 
     print("\n Orchestrator and the 4 workers successfuly")
-    
+
+    #Get the ip of the orchestrator
+    orchestrator_ip=orchestrator_m4[0][1]
+    orchestrator_port=80
+
+    data="hello"
+    first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
+
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
 
