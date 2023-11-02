@@ -1,5 +1,8 @@
-
-
+from flask import Flask,jsonify
+from transformers import DistilBertTokenizer,DistilBertForSequenceClassification
+import torch
+import random
+import string
 
 app=Flask(__name__)
 
@@ -24,4 +27,4 @@ def run_model():
 
 if __name__=='__main__':
     # TO BE ADJUST FOR ADEQUATE 
-    app.run(host='0.0.0.0',port=5000)
+    app.run(port="8050", debug=True)
