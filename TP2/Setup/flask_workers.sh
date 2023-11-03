@@ -57,7 +57,7 @@ EOL
 cat <<EOL > /home/ubuntu/composeflask/requirements.txt
 flask
 transformers
-torch
+torch==1.10.0
 EOL
 
 #create a dockerfile:
