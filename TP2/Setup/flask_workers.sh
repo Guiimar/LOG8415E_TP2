@@ -35,7 +35,7 @@ def generate_random_text(length=50):
 
 @app.route("/")
 def my_app():
-    return 'Instance is responding'
+    return 'container is responding'
 
 @app.route('/run_model',methods=['POST'])
 def run_model():
