@@ -91,4 +91,4 @@ services:
 EOL
 
 #lanching the docker compose containing the 2 containers:
-docker compose up -d
+sudo docker compose up -d
