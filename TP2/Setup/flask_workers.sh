@@ -83,7 +83,7 @@ services:
   webapp1:
     build: .
     ports:
-      - "5000"
+      - "5000:5000"
   webapp2:
     build: .
     ports:
