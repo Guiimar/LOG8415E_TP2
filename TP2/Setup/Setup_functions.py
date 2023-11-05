@@ -53,7 +53,7 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
     
     Security_group=resource.SecurityGroup(Security_group_ID)
     
-    #Add an inbounded allowing inbounded traffics of all protocols, from and to all ports, and all Ipranges.  
+    #Add an inbounded allowing inbounded traffics of tcp protocol, and ports 22,80,5000,5001, and all Ipranges.  
     Security_group.authorize_ingress(
          IpPermissions=[
             {'FromPort':22,
@@ -111,7 +111,7 @@ def create_instance_ec2(num_instances,ami_id,
         )
         #Addition create instances return the id and the ip
         instances.append([instance[0].id,instance[0].private_ip_address])
-        print ('Instance: ',i+1,' having the Id: ',instance[0].id,'having the IP',instance[0].private_ip_address,'in Availability Zone: ', Availabilityzons[i], 'is created')
+        print (str(instance_function) +': '+str(i+1)+' having the Id: '+ str(instance[0].id)+' having the IP '+str(instance[0].private_ip_address)+'in Availability Zone: '+str(Availabilityzons[i])+'is created')
         #print(f'{instances[i]} is starting')
    
     return instances

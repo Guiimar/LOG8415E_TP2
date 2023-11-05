@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     print('============================>SETUP Begins')
 
-    #--------------------------------------Creating ec2 and elbv2 resource and client ----------------------------------------
+    #--------------------------------------Creating ec2 resource and client ----------------------------------------
     
     #Create ec2 resource with our credentials:
     ec2_serviceresource = resource_ec2(key_id, access_key, session_token)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     ud_workers = str(flask_script_worker)
 
 
-    #--------------------------------------Create Instances of cluster 1 ------------------------------------------------------------
+    #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
 
     # Create 5 instances with m4.large as instance type:
     Availabilityzons_Cluster1=['us-east-1a','us-east-1b','us-east-1a','us-east-1b','us-east-1a']
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     with open ("test.json","w") as f:
         json.dump(data,f)
 
-    print("\n Orchestrator and the 4 workers successfuly")
+    print("\n Orchestrator and the 4 workers created successfuly")
 
     #Get the ip of the orchestrator
     orchestrator_ip=orchestrator_m4[0][1]
