@@ -99,7 +99,6 @@ if __name__ == '__main__':
     
     #Creation of the 4 workers
     workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
-    #print(workers_m4)
 
     #Modifier le fichier test.json en fonction pour modifier les IP
     with open("test.json","r") as f:
@@ -118,12 +117,13 @@ if __name__ == '__main__':
     print("\n Orchestrator and the 4 workers created successfuly")
 
     #Get the ip of the orchestrator
+
     orchestrator_ip=orchestrator_m4[0][1]
     orchestrator_port=80
 
     data="hello"
-    first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
-
+    #first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
+    
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
 

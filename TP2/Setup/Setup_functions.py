@@ -109,17 +109,27 @@ def create_instance_ec2(num_instances,ami_id,
                     },
                 ]
         )
+
         #Addition create instances return the id and the ip
+<<<<<<< HEAD
         instances.append([instance[0].id,instance[0].public_ip_address])
         print (str(instance_function) +': '+str(i+1)+' having the Id: '+ str(instance[0].id)+' having the IP '+str(instance[0].public_ip_address)+' in Availability Zone: '+str(Availabilityzons[i])+' is created')
         #print(f'{instances[i]} is starting')
    
+=======
+        instance[0].wait_until_running()
+        instance[0].reload()
+        # Read public IP address
+        public_ip = instance[0].public_ip_address
+        instances.append([instance[0].id,public_ip])
+        print ('Instance: ',i+1,' having the Id: ',instance[0].id,'and having the ip',public_ip,' in Availability Zone: ', Availabilityzons[i], 'is created')
+>>>>>>> 95ce29ef38bc6427c3d893ad74aa7e34549c6ec3
     return instances
 
 #Function to send request (to orchestrator)
 def send_request_to_orchestrator(ip,port,data):
     try:
-        url="http://{}:{}/{}".format(ip, port,'/new_request')
+        url="http://{}:{}/{}".format(ip, port,'new_request')
         #post pour transmettre la requête
         response=requests.post(url,data=data)
     except Exception as e:

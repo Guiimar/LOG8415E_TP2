@@ -15,7 +15,7 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     container_port=container_info["port"]
 
     try:
-        url="http://{}:{}/{}".format(container_ip, container_port,'/run_model')
+        url="http://{}:{}/{}".format(container_ip, container_port,'run_model')
         #post pour transmettre la requête
         response=requests.post(url,data=incoming_request_data)
     except Exception as e:
@@ -65,6 +65,9 @@ def process_request(incoming_request_data):
 @app.route("/new_request",methods=["POST"])
 def new_request():
     incoming_request_data=request.json
+    # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
+    while request_queue:
+        threading.Thread(target=process_request,args=(request_queue,)).start()
     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
     return jsonify({"message":"Request received and processing started."})
 
