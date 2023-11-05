@@ -53,7 +53,7 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
     
     Security_group=resource.SecurityGroup(Security_group_ID)
     
-    #Add an inbounded allowing inbounded traffics of all protocols, from and to all ports, and all Ipranges.  
+    #Add an inbounded allowing inbounded traffics of tcp protocol, and ports 22,80,5000,5001, and all Ipranges.  
     Security_group.authorize_ingress(
          IpPermissions=[
             {'FromPort':22,
