@@ -87,12 +87,12 @@ if __name__ == '__main__':
     ud_workers = str(flask_script_worker)
 
 
-    #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
+    #--------------------------------------Create the workers ------------------------------------------------------------
 
-    # Create 5 instances with m4.large as instance type:
+    # Create 4 intances with m4.large as workers:
     Availabilityzons_Cluster1=['us-east-1a','us-east-1b','us-east-1a','us-east-1b','us-east-1a']
     instance_type = "m4.large"
-    print("\n Creating instances : the orchestrator and the workers ")
+    print("\n Creating instances : the workers ")
 
     #Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)

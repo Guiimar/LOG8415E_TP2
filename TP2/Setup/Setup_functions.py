@@ -110,8 +110,8 @@ def create_instance_ec2(num_instances,ami_id,
                 ]
         )
         #Addition create instances return the id and the ip
-        instances.append([instance[0].id,instance[0].private_ip_address])
-        print (str(instance_function) +': '+str(i+1)+' having the Id: '+ str(instance[0].id)+' having the IP '+str(instance[0].private_ip_address)+'in Availability Zone: '+str(Availabilityzons[i])+'is created')
+        instances.append([instance[0].id,instance[0].public_ip_address])
+        print (str(instance_function) +': '+str(i+1)+' having the Id: '+ str(instance[0].id)+' having the IP '+str(instance[0].public_ip_address)+' in Availability Zone: '+str(Availabilityzons[i])+' is created')
         #print(f'{instances[i]} is starting')
    
     return instances
