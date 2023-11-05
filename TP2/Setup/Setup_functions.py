@@ -56,12 +56,28 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
     #Add an inbounded allowing inbounded traffics of all protocols, from and to all ports, and all Ipranges.  
     Security_group.authorize_ingress(
          IpPermissions=[
-            {'FromPort':-1,
-             'ToPort':-1,
-             'IpProtocol':'-1',
+            {'FromPort':22,
+             'ToPort':22,
+             'IpProtocol':'tcp',
              'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
-            }]
-    )       
+            },
+            {'FromPort':80,
+             'ToPort':80,
+             'IpProtocol':'tcp',
+             'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
+            },
+            {'FromPort':5000,
+             'ToPort':5000,
+             'IpProtocol':'tcp',
+             'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
+            },
+            {'FromPort':5001,
+             'ToPort':5001,
+             'IpProtocol':'tcp',
+             'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
+            }
+            ]
+    ) 
     return Security_group_ID
 
 #------------------------------------------------End----------------------------------------------------
