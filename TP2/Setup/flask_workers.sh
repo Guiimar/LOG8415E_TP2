@@ -50,7 +50,6 @@ def run_model():
     return jsonify({"input_text": input_text,"probabilities":probabilities_list})
 
 if __name__=='__main__':
-    # TO BE ADJUST FOR ADEQUATE 
     app.run(host='0.0.0.0',port=5000)
 
 EOL
@@ -77,7 +76,7 @@ COPY . .
 CMD ["flask", "run"]
 EOL
 
-#first container on 5000:
+#:
 cat <<EOL > /home/ubuntu/composeflask/compose.yaml
 services:
   webapp1:
