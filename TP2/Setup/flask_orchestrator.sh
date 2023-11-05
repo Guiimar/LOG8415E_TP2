@@ -28,6 +28,12 @@ pip install json
 pip install flask-restful
 pip install requests
 pip install ec2_metadata
+
+#Create json file that will cointain the IP addresses and port of cointainers:
+cat <<EOL > /home/ubuntu/flaskapp/test.json
+{"container1": {"ip": "52.207.230.181", "port": "5000", "status": "free"}, "container2": {"ip": "52.207.230.181", "port": "5001", "status": "free"}, "container3": {"ip": "54.242.144.46", "port": "5000", "status": "free"}, "container4": {"ip": "54.242.144.46", "port": "5001", "status": "free"}, "container5": {"ip": "18.208.157.209", "port": "5000", "status": "free"}, "container6": {"ip": "18.208.157.209", "port": "5001", "status": "free"}, "container7": {"ip": "34.230.52.199", "port": "5000", "status": "free"}, "container8": {"ip": "34.230.52.199", "port": "5001", "status": "free"}}
+EOL
+
 #Create of a simple Flask app:
 
 cat <<EOL > /home/ubuntu/flaskapp/flask_app.py
