@@ -15,7 +15,7 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     container_port=container_info["port"]
 
     try:
-        url="http://{}:{}/{}".format(container_ip, container_port,'/run_model')
+        url="http://{}:{}/{}".format(container_ip, container_port,'run_model')
         #post pour transmettre la requête
         response=requests.post(url,data=incoming_request_data)
     except Exception as e:
