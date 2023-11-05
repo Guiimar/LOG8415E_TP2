@@ -94,9 +94,6 @@ if __name__ == '__main__':
     instance_type = "m4.large"
     print("\n Creating instances : the orchestrator and the workers ")
 
-    #Creation of the orchestrator
-    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
-    
     #Creation of the 4 workers
     workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
 
@@ -114,6 +111,13 @@ if __name__ == '__main__':
     with open ("test.json","w") as f:
         json.dump(data,f)
 
+    print("\n\n json file updated succesfully \n\n")
+    
+    time.sleep(120)
+
+    #Creation of the orchestrator
+    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
+
     print("\n Orchestrator and the 4 workers created successfuly")
 
     #Get the ip of the orchestrator
@@ -122,7 +126,7 @@ if __name__ == '__main__':
     orchestrator_port=80
 
     data="hello"
-    #first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
+    first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
     
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
