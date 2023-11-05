@@ -36,7 +36,7 @@ EOL
 
 #Create of a simple Flask app:
 
-cat <<EOL > /home/ubuntu/flaskapp/flask_app.py
+cat <<EOL > /home/ubuntu/flaskapp/orchestartor.py
 from flask import Flask,request,jsonify
 import threading
 import json
@@ -127,7 +127,7 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/flaskapp
-ExecStart=/home/ubuntu/flaskapp/venv/bin/gunicorn -b localhost:8000 flask_app:app
+ExecStart=/home/ubuntu/flaskapp/venv/bin/gunicorn -b localhost:8000 orchestartor:app
 Restart=always
 
 [Install]

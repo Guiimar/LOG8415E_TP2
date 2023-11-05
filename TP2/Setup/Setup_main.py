@@ -89,12 +89,12 @@ if __name__ == '__main__':
 
     #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
 
-    # Create 5 instances with m4.large as instance type:
+    # Create 4 intances with m4.large as workers:
     Availabilityzons_Cluster1=['us-east-1a','us-east-1b','us-east-1a','us-east-1b','us-east-1a']
     instance_type = "m4.large"
-    print("\n Creating instances : the orchestrator and the workers ")
+    print("\n Creating instances : the workers ")
 
-    #Creation of the 4 workers
+    # Creation of the 4 workers
     workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
 
     #Modifier le fichier test.json en fonction pour modifier les IP
@@ -115,7 +115,7 @@ if __name__ == '__main__':
     
     time.sleep(120)
 
-    #Creation of the orchestrator
+    # Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
 
     print("\n Orchestrator and the 4 workers created successfuly")
