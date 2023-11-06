@@ -1,3 +1,5 @@
+#!/bin/bash
+
 sudo apt-get -y update
 sudo apt-get -y install ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -76,7 +78,7 @@ COPY . .
 CMD ["flask", "run"]
 EOL
 
-#:
+#creating the YAML compose file having the services of the two containers :
 cat <<EOL > /home/ubuntu/composeflask/compose.yaml
 services:
   webapp1:
