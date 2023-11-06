@@ -9,9 +9,10 @@ from threading import Thread
 if __name__ == '__main__':
     # Get credentials from the config file :
     path = os.path.dirname(os.getcwd())
+    #print(path)
     #path=path+"\TP2"
     config_object = configparser.ConfigParser()
-    with open(path+"\credentials.ini","r") as file_object:
+    with open(path+"/credentials.ini","r") as file_object:
         config_object.read_file(file_object)
         key_id = config_object.get("resource","aws_access_key_id")
         access_key = config_object.get("resource","aws_secret_access_key")
@@ -85,7 +86,6 @@ if __name__ == '__main__':
         flask_script_worker = f.read()
 
     ud_workers = str(flask_script_worker)
-
 
     #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
 
