@@ -6,7 +6,8 @@ import os
 from datetime import date
 
 #Function to send request (to orchestrator)
-def send_request_to_orchestrator(ip,port,data):
+def send_request_to_orchestrator(info):
+    ip=info[0],port=info[1],data=info[2]
     try:
         url="http://{}:{}/{}".format(ip, port,'new_request')
         #post pour transmettre la requête
@@ -47,18 +48,19 @@ if __name__ == '__main__':
     
         
     response = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
-    ip_address_orchestrator=response['Reservations']['Instances'].get('PublicIpAddress')
+    ip_address_orchestrator=response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+   
 
     # Send requests to orchestrator
     orchestrator_port=80
     data='Hello'
     num_requests=5
 
-    print (date.utcnow())
+    # print (date.utcnow())
     print('Starting sending requests to orchestrator simultaneously') 
     send_multiple_requests(ip_address_orchestrator,orchestrator_port,data,num_requests)
     print('Finished sending requests') 
-    print (date.utcnow())
+    #print (date.utcnow())
 
 
 
