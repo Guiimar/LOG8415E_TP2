@@ -2,7 +2,6 @@ import configparser
 import boto3
 import time
 import requests
-import multiprocessing
 
 #Function to create a service resource for ec2: 
 def resource_ec2(aws_access_key_id, aws_secret_access_key, aws_session_token):
@@ -121,34 +120,6 @@ def create_instance_ec2(num_instances,ami_id,
         print ('Instance: '+str(instance_function)+str(i+1),' having the Id: ',instance[0].id,'and having the ip',public_ip,' in Availability Zone: ', Availabilityzons[i], 'is created')
     return instances
 
-#Function to send request (to orchestrator)
-def send_request_to_orchestrator(ip,port,data):
-    try:
-        url="http://{}:{}/{}".format(ip, port,'new_request')
-        #post pour transmettre la requête
-        response=requests.post(url,data=data)
-    except Exception as e:
-        print('Exception returned is',e)
-
-'''
-def send_thread(ip,port,data,number_requests):
-    print('Starting sending requests of Thread to orchestrator')
-    for _ in range(number_requests):
-        send_request_to_orchestrator(ip,port,data)
-    print('Finished sending requests of Thread to orchestrator') '''
-
-def send_multiple_requests(ip,port,data,num_requests):
-    # Create a pool to distribute tasks among multiple processes :
-    pool = multiprocessing.Pool(processes=num_requests)
-
-    # use a pool of worker processes to send multiple HTTP requests simultaneously :
-    pool.map(send_request_to_orchestrator, [(ip, port, data)]*num_requests)
-
-    # Desable any other incoming request
-    pool.close()
-    # block running until all requests are executed 
-    pool.join()
-    print('Finished sending requests to orchestrator simultaneously') 
 
     
     
