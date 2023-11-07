@@ -62,14 +62,22 @@ def process_request(incoming_request_data):
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
         request_queue.append(incoming_request_data)    
 
-@app.route("/new_request",methods=["POST"])
-def new_request():
-    incoming_request_data=request.json
+# @app.route("/new_request",methods=["POST"])
+# def new_request():
+#     incoming_request_data=""
+#     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
+#     while request_queue:
+#         threading.Thread(target=process_request,args=(request_queue,)).start()
+#     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
+
+#     return jsonify({"message":"Request received and processing started."})
+
+if __name__ == '__main__':
+
+    incoming_request_data=""
     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
     while request_queue:
         threading.Thread(target=process_request,args=(request_queue,)).start()
     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
-    return jsonify({"message":"Request received and processing started."})
 
-if __name__=="__main__":
-    app.run(port=80)
+    #return jsonify({"message":"Request received and processing started."})
