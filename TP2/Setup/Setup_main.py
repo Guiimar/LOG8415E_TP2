@@ -86,6 +86,7 @@ if __name__ == '__main__':
         flask_script_worker = f.read()
 
     ud_workers = str(flask_script_worker)
+    
 
     #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
 
@@ -97,11 +98,11 @@ if __name__ == '__main__':
     # Creation of the 4 workers
     workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
 
-    #Modifier le fichier test.json en fonction pour modifier les IP
+    # Modifier le fichier test.json en fonction pour modifier les IP
     with open("test.json","r") as f:
             data=json.load(f)
 
-    #Partie qui modifie les ip dans le fichier test.json
+    # Partie qui modifie les ip dans le fichier test.json
     container_count = 0
     for i in range(len(workers_m4)):
         for _ in range(2):
@@ -113,21 +114,15 @@ if __name__ == '__main__':
 
     print("\n\n json file updated succesfully \n\n")
     
-    time.sleep(120)
+    time.sleep(330)
+
+    print("\n Creating instances : Orchestrator ")
 
     # Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
 
     print("\n Orchestrator and the 4 workers created successfuly")
 
-    #Get the ip of the orchestrator
-
-    orchestrator_ip=orchestrator_m4[0][1]
-    orchestrator_port=80
-
-    data="hello"
-    first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
-    
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
 
@@ -142,6 +137,6 @@ if __name__ == '__main__':
     ])
     #Get mapping dictionary between Availability zones and subnets Ids
     mapping_AZ_subnetid={subnet['AvailabilityZone']:subnet['SubnetId'] for subnet in subnets_discription['Subnets']}
-    mapping_AZ_subnetid
+    
     
     print('============================>SETUP ends')
