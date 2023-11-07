@@ -22,21 +22,21 @@ python3 -m venv venv
 source venv/bin/activate
 
 #Install Flask
-
+# pip install --upgrade pip
 pip install Flask
-pip install json
+pip install jsons
 pip install flask-restful
 pip install requests
 pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "52.207.230.181", "port": "5000", "status": "free"}, "container2": {"ip": "52.207.230.181", "port": "5001", "status": "free"}, "container3": {"ip": "54.242.144.46", "port": "5000", "status": "free"}, "container4": {"ip": "54.242.144.46", "port": "5001", "status": "free"}, "container5": {"ip": "18.208.157.209", "port": "5000", "status": "free"}, "container6": {"ip": "18.208.157.209", "port": "5001", "status": "free"}, "container7": {"ip": "34.230.52.199", "port": "5000", "status": "free"}, "container8": {"ip": "34.230.52.199", "port": "5001", "status": "free"}}
+{"container1": {"ip": "44.200.12.48", "port": "5000", "status": "free"}, "container2": {"ip": "44.200.12.48", "port": "5001", "status": "free"}, "container3": {"ip": "54.147.59.102", "port": "5000", "status": "free"}, "container4": {"ip": "54.147.59.102", "port": "5001", "status": "free"}, "container5": {"ip": "3.227.22.130", "port": "5000", "status": "free"}, "container6": {"ip": "3.227.22.130", "port": "5001", "status": "free"}, "container7": {"ip": "35.172.119.0", "port": "5000", "status": "free"}, "container8": {"ip": "35.172.119.0", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
 
-cat <<EOL > /home/ubuntu/flaskapp/orchestartor.py
+cat <<EOL > /home/ubuntu/flaskapp/orchestrator.py
 from flask import Flask,request,jsonify
 import threading
 import json
@@ -54,7 +54,7 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     container_port=container_info["port"]
 
     try:
-        url="http://{}:{}/{}".format(container_ip, container_port,'/run_model')
+        url="http://{}:{}/{}".format(container_ip, container_port,'run_model')
         #post pour transmettre la requête
         response=requests.post(url,data=incoming_request_data)
     except Exception as e:
@@ -76,15 +76,15 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
 
 def update_container_status(container_id,status):
     with lock:
-        with open("test.json","r") as f:
+        with open("/home/ubuntu/flaskapp/test.json","r") as f:
             data=json.load(f)
         data[container_id]["status"]=status
-        with open ("test.json","w") as f:
+        with open ("/home/ubuntu/flaskapp/test.json","w") as f:
             json.dump(data,f)
 
 def process_request(incoming_request_data):
     with lock:
-        with open("test.json","r") as f:
+        with open("/home/ubuntu/flaskapp/test.json","r") as f:
             data=json.load(f)
     free_container=None
     for container_id, container_info in data.items():
@@ -96,19 +96,22 @@ def process_request(incoming_request_data):
         send_request_to_container(
             free_container,data[free_container],incoming_request_data
         )
-        update_container_status(free_container,"free")
+        #update_container_status(free_container,"free")
     else:
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
         request_queue.append(incoming_request_data)    
 
 @app.route("/new_request",methods=["POST"])
 def new_request():
-    incoming_request_data=request.json
+    incoming_request_data=""
+    # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
+    while request_queue:
+        threading.Thread(target=process_request,args=(request_queue,)).start()
     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
+
     return jsonify({"message":"Request received and processing started."})
 
-if __name__=="__main__":
-    app.run(port=80)
+
 
 EOL
 
@@ -127,7 +130,7 @@ After=network.target
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/flaskapp
-ExecStart=/home/ubuntu/flaskapp/venv/bin/gunicorn -b localhost:8000 orchestartor:app
+ExecStart=/home/ubuntu/flaskapp/venv/bin/gunicorn -b localhost:8000 orchestrator:app
 Restart=always
 
 [Install]
