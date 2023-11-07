@@ -85,6 +85,7 @@ if __name__ == '__main__':
         flask_script_worker = f.read()
 
     ud_workers = str(flask_script_worker)
+    
 
 
     #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
@@ -113,7 +114,9 @@ if __name__ == '__main__':
 
     print("\n\n json file updated succesfully \n\n")
     
-    time.sleep(120)
+    time.sleep(330)
+
+    print("\n Creating instances : Orchestrator ")
 
     # Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
@@ -125,8 +128,10 @@ if __name__ == '__main__':
     orchestrator_ip=orchestrator_m4[0][1]
     orchestrator_port=80
 
+    # Send 
+
     data="hello"
-    first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
+    # first_sending_thread=Thread(target=send_thread,args=(orchestrator_ip,orchestrator_port,data,10))
     
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
