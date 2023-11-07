@@ -98,7 +98,7 @@ def create_instance_ec2(num_instances,ami_id,
             MaxCount=1,
             Placement={'AvailabilityZone':Availabilityzons[i]},
             SecurityGroupIds=[security_group_id] if security_group_id else [],
-            #UserData=user_data,
+            UserData=user_data,
             TagSpecifications=[
                     {
                         'ResourceType': 'instance',
