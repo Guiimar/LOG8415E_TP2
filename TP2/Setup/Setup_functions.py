@@ -67,6 +67,11 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
              'IpProtocol':'tcp',
              'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
             },
+            {'FromPort':443,
+             'ToPort':443,
+             'IpProtocol':'tcp',
+             'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
+            },
             {'FromPort':5000,
              'ToPort':5000,
              'IpProtocol':'tcp',
