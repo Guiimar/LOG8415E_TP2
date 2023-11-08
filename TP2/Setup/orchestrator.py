@@ -9,7 +9,7 @@ lock=threading.Lock()
 request_queue=[]
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
-    print(f"Sending request to{container_id} with data : {incoming_request_data}...")
+    print(f"Sending request to {container_id} with data : {incoming_request_data}...")
 
     container_ip=container_info["ip"]
     container_port=container_info["port"]
@@ -31,7 +31,7 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     else:
         print("La requête a échoué. Code d'état du serveur :", response.status_code)
 
-    print(f"Received response from{container_id}")
+    print(f"Received response from {container_id}")
 
 
 
@@ -81,3 +81,4 @@ if __name__ == '__main__':
     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
 
     #return jsonify({"message":"Request received and processing started."})
+
