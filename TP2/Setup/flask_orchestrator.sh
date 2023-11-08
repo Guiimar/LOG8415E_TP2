@@ -31,7 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "44.200.12.48", "port": "5000", "status": "free"}, "container2": {"ip": "44.200.12.48", "port": "5001", "status": "free"}, "container3": {"ip": "54.147.59.102", "port": "5000", "status": "free"}, "container4": {"ip": "54.147.59.102", "port": "5001", "status": "free"}, "container5": {"ip": "3.227.22.130", "port": "5000", "status": "free"}, "container6": {"ip": "3.227.22.130", "port": "5001", "status": "free"}, "container7": {"ip": "35.172.119.0", "port": "5000", "status": "free"}, "container8": {"ip": "35.172.119.0", "port": "5001", "status": "free"}}
+{"container1": {"ip": "3.220.164.255", "port": "5000", "status": "free"}, "container2": {"ip": "3.220.164.255", "port": "5001", "status": "free"}, "container3": {"ip": "54.174.116.65", "port": "5000", "status": "free"}, "container4": {"ip": "54.174.116.65", "port": "5001", "status": "free"}, "container5": {"ip": "3.238.194.9", "port": "5000", "status": "free"}, "container6": {"ip": "3.238.194.9", "port": "5001", "status": "free"}, "container7": {"ip": "3.86.207.57", "port": "5000", "status": "free"}, "container8": {"ip": "3.86.207.57", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
@@ -46,6 +46,8 @@ import requests
 app=Flask(__name__)
 lock=threading.Lock()
 request_queue=[]
+path = "/home/ubuntu/flaskapp/"
+#path = ""
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
     print(f"Sending request to {container_id} with data : {incoming_request_data}...")
@@ -76,15 +78,15 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
 
 def update_container_status(container_id,status):
     with lock:
-        with open("test.json","r") as f:
+        with open(path+"test.json","r") as f:
             data=json.load(f)
         data[container_id]["status"]=status
-        with open ("test.json","w") as f:
+        with open (path+"test.json","w") as f:
             json.dump(data,f)
 
 def process_request(incoming_request_data):
     with lock:
-        with open("test.json","r") as f:
+        with open(path+"test.json","r") as f:
             data=json.load(f)
     free_container=None
     for container_id, container_info in data.items():
@@ -111,6 +113,9 @@ def process_request(incoming_request_data):
 
 #     return jsonify({"message":"Request received and processing started."})
 
+# if __name__ == '__main__':
+#     app.run(host='0.0.0.0',port=5000)
+
 if __name__ == '__main__':
 
     incoming_request_data=""
@@ -120,8 +125,6 @@ if __name__ == '__main__':
     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
 
     #return jsonify({"message":"Request received and processing started."})
-
-
 
 EOL
 
