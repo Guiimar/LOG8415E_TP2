@@ -31,7 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "3.220.164.255", "port": "5000", "status": "free"}, "container2": {"ip": "3.220.164.255", "port": "5001", "status": "free"}, "container3": {"ip": "54.174.116.65", "port": "5000", "status": "free"}, "container4": {"ip": "54.174.116.65", "port": "5001", "status": "free"}, "container5": {"ip": "3.238.194.9", "port": "5000", "status": "free"}, "container6": {"ip": "3.238.194.9", "port": "5001", "status": "free"}, "container7": {"ip": "3.86.207.57", "port": "5000", "status": "free"}, "container8": {"ip": "3.86.207.57", "port": "5001", "status": "free"}}
+{"container1": {"ip": "3.210.204.20", "port": "5000", "status": "free"}, "container2": {"ip": "3.210.204.20", "port": "5001", "status": "free"}, "container3": {"ip": "54.175.13.10", "port": "5000", "status": "free"}, "container4": {"ip": "54.175.13.10", "port": "5001", "status": "free"}, "container5": {"ip": "3.235.137.194", "port": "5000", "status": "free"}, "container6": {"ip": "3.235.137.194", "port": "5001", "status": "free"}, "container7": {"ip": "3.89.215.213", "port": "5000", "status": "free"}, "container8": {"ip": "3.89.215.213", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
