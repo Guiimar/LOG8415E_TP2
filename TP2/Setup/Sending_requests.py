@@ -18,7 +18,7 @@ def send_request_to_orchestrator(info):
 def send_multiple_requests(ip,port,data,num_requests):
     # Create a pool to distribute tasks among multiple processes :
     pool = multiprocessing.Pool(processes=num_requests)
-
+ 
     # use a pool of worker processes to send multiple HTTP requests simultaneously :
     pool.map(send_request_to_orchestrator, [(ip, port, data)]*num_requests)
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
    
 
     # Send requests to orchestrator
-    orchestrator_port=80
+    orchestrator_port=5000
     data='Hello'
     num_requests=5
 
