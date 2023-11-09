@@ -62,7 +62,14 @@ def process_request(incoming_request_data):
         update_container_status(free_container,"free")
     else:
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
-        request_queue.append(incoming_request_data)    
+        request_queue.append(incoming_request_data)   
+
+
+def process_request_queue():
+    while True:
+        if request_queue:
+            incoming_request_data = request_queue.pop(0)  # Get the oldest request (FIFO)
+            process_request(incoming_request_data) 
 
 @app.route("/new_request",methods=["POST"])
 def new_request():
