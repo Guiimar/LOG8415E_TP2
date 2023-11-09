@@ -10,10 +10,9 @@ import re
 if __name__ == '__main__':
     # Get credentials from the config file :
     path = os.path.dirname(os.getcwd())
-    #print(path)
-    #path=path+"\TP2"
     config_object = configparser.ConfigParser()
     with open(path+"/credentials.ini","r") as file_object:
+        #Loading of the aws tokens
         config_object.read_file(file_object)
         key_id = config_object.get("resource","aws_access_key_id")
         access_key = config_object.get("resource","aws_secret_access_key")
@@ -103,9 +102,10 @@ if __name__ == '__main__':
     with open("test.json","r") as f:
             data=json.load(f)
 
-    # Partie qui modifie les ip dans le fichier test.json
+    # Modify the ip in the test.json
     container_count = 0
     for i in range(len(workers_m4)):
+        # Get one worker and map it to two containers with different ports :port 5000 and 5001
         for _ in range(2):
             container_count += 1
             container_id = "container" + str(container_count)
@@ -117,25 +117,28 @@ if __name__ == '__main__':
     
     print('\n Waiting for deployement of flask application on workers containers ....\n')
 
-    #time.sleep(330)
+    time.sleep(330)
 
     print("\n Creating instances : Orchestrator ")
 
-    ##Once the test json is updated, modify automatically the IP in orchestrator_user data
+    ##Once the test json is updated (with new ip), modify automatically the IP in orchestrator_user data 
     with open("test.json","r") as f:
             data=json.load(f)
     #get the modified IP
     new_ip=str(data)
     new_ip=new_ip.replace("'", '"')
-
+    #Get the content of the old test.json content  in the previous user id
     pattern = re.compile(r'test\.json\n(.*?)\nEOL', re.DOTALL)
     result = re.search(pattern, ud_orchestrator)
     old_ip = result.group(1)
 
+    #Replace the content of the updated ip in the ud_orchestrator
     ud_orchestrator=ud_orchestrator.replace(old_ip,new_ip)
-    #Rewrite the file
+    #Rewrite the updated
     with open('flask_orchestrator.sh', 'w') as file:
         file.write(ud_orchestrator)
+
+    print("\n flask_orchestrator with the new containers ip ")
 
     # Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",'')
