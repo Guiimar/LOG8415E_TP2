@@ -5,6 +5,7 @@ import base64
 import os
 import json
 from threading import Thread
+import re
 
 if __name__ == '__main__':
     # Get credentials from the config file :
@@ -116,9 +117,25 @@ if __name__ == '__main__':
     
     print('\n Waiting for deployement of flask application on workers containers ....\n')
 
-    time.sleep(330)
+    #time.sleep(330)
 
     print("\n Creating instances : Orchestrator ")
+
+    ##Once the test json is updated, modify automatically the IP in orchestrator_user data
+    with open("test.json","r") as f:
+            data=json.load(f)
+    #get the modified IP
+    new_ip=str(data)
+    new_ip=new_ip.replace("'", '"')
+
+    pattern = re.compile(r'test\.json\n(.*?)\nEOL', re.DOTALL)
+    result = re.search(pattern, ud_orchestrator)
+    old_ip = result.group(1)
+
+    ud_orchestrator=ud_orchestrator.replace(old_ip,new_ip)
+    #Rewrite the file
+    with open('flask_orchestrator.sh', 'w') as file:
+        file.write(ud_orchestrator)
 
     # Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",'')
