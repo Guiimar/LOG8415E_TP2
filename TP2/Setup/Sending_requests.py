@@ -50,13 +50,12 @@ if __name__ == '__main__':
                         aws_session_token= session_token) 
     
         
-    response = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
-    ip_address_orchestrator=response['Reservations'][0]['Instances'][0]['PublicIpAddress']
-    print(ip_address_orchestrator)
+    response_orch = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
+    ip_address_orchestrator=response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
     # Send requests to orchestrator
     orchestrator_port=5000
     data='Hello'
-    num_requests=5
+    num_requests=10
 
     info=[ip_address_orchestrator,orchestrator_port,data]
     print('Starting sending requests to orchestrator simultaneously') 
