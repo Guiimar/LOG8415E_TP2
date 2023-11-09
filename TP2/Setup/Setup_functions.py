@@ -89,7 +89,8 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
 #------------------------------------------------End----------------------------------------------------
 
 
-#Function to create ec2 instances : 
+#Function to create ec2 instances :  The function a list containing the [id of instance,public_ip_address]
+
 def create_instance_ec2(num_instances,ami_id,
     instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons,instance_function,user_data):
     instances=[]
@@ -116,10 +117,10 @@ def create_instance_ec2(num_instances,ami_id,
                 ]
         )
 
-        #Addition create instances return the id and the ip
+        #Wait until the instance is running to get its public_ip adress
         instance[0].wait_until_running()
         instance[0].reload()
-        # Read public IP address
+        #Get the public ip address of the instance and add it in the return
         public_ip = instance[0].public_ip_address
         instances.append([instance[0].id,public_ip])
         print ('Instance: '+str(instance_function)+str(i+1),' having the Id: ',instance[0].id,'and having the ip',public_ip,' in Availability Zone: ', Availabilityzons[i], 'is created')

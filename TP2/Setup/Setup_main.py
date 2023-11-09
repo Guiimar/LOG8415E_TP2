@@ -134,7 +134,7 @@ if __name__ == '__main__':
 
     #Replace the content of the updated ip in the ud_orchestrator
     ud_orchestrator=ud_orchestrator.replace(old_ip,new_ip)
-    #Rewrite the updated
+    #Rewrite the updated file 
     with open('flask_orchestrator.sh', 'w') as file:
         file.write(ud_orchestrator)
 
