@@ -31,11 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-<<<<<<< HEAD
-{"container1": {"ip": "52.91.170.106", "port": "5000", "status": "free"}, "container2": {"ip": "52.91.170.106", "port": "5001", "status": "free"}, "container3": {"ip": "3.91.92.63", "port": "5000", "status": "free"}, "container4": {"ip": "3.91.92.63", "port": "5001", "status": "free"}, "container5": {"ip": "18.232.147.157", "port": "5000", "status": "free"}, "container6": {"ip": "18.232.147.157", "port": "5001", "status": "free"}, "container7": {"ip": "54.89.10.201", "port": "5000", "status": "free"}, "container8": {"ip": "54.89.10.201", "port": "5001", "status": "free"}}
-=======
-{"container1": {"ip": "3.210.204.20", "port": "5000", "status": "free"}, "container2": {"ip": "3.210.204.20", "port": "5001", "status": "free"}, "container3": {"ip": "54.175.13.10", "port": "5000", "status": "free"}, "container4": {"ip": "54.175.13.10", "port": "5001", "status": "free"}, "container5": {"ip": "3.235.137.194", "port": "5000", "status": "free"}, "container6": {"ip": "3.235.137.194", "port": "5001", "status": "free"}, "container7": {"ip": "3.89.215.213", "port": "5000", "status": "free"}, "container8": {"ip": "3.89.215.213", "port": "5001", "status": "free"}}
->>>>>>> 38f1a6b2b80d744be4d5424fa09de4df0abf0022
+{"container1": {"ip": "52.201.230.99", "port": "5000", "status": "free"}, "container2": {"ip": "52.201.230.99", "port": "5001", "status": "free"}, "container3": {"ip": "54.161.72.199", "port": "5000", "status": "free"}, "container4": {"ip": "54.161.72.199", "port": "5001", "status": "free"}, "container5": {"ip": "54.227.48.172", "port": "5000", "status": "free"}, "container6": {"ip": "54.227.48.172", "port": "5001", "status": "free"}, "container7": {"ip": "3.90.137.20", "port": "5000", "status": "free"}, "container8": {"ip": "3.90.137.20", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
@@ -102,6 +98,7 @@ def process_request(incoming_request_data):
         send_request_to_container(
             free_container,data[free_container],incoming_request_data
         )
+        time.sleep(2)
         update_container_status(free_container,"free")
     else:
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
@@ -119,6 +116,8 @@ def new_request():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000)
+    print('\n-----End-----')
+    print('\n-----Please send other requests-----')
 
 EOL
 
