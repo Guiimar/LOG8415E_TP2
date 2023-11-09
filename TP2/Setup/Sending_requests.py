@@ -6,7 +6,10 @@ import os
 from datetime import date
 
 #Function to send request (to orchestrator)
-def send_request_to_orchestrator(ip,port,data):
+def send_request_to_orchestrator(info):
+    ip=info[0]
+    port=info[1]
+    data=info[2]
     try:
         url="http://{}:{}/{}".format(ip, port,'new_request')
         #post pour transmettre la requête
@@ -14,13 +17,14 @@ def send_request_to_orchestrator(ip,port,data):
     except Exception as e:
         print('Exception returned is',e)
 
-def send_multiple_requests(ip,port,data,num_requests):
+def send_multiple_requests(info,num_requests):
     # Create a pool to distribute tasks among multiple processes :
+    print('Ok')
     pool = multiprocessing.Pool(processes=num_requests)
-
+    print('Ok')
     # use a pool of worker processes to send multiple HTTP requests simultaneously :
-    pool.map(send_request_to_orchestrator, [(ip, port, data)]*num_requests)
-
+    pool.map(send_request_to_orchestrator, [info]*num_requests)
+    print('Ok')
     # Desable any other incoming request
     pool.close()
     # block running until all requests are executed 
@@ -47,18 +51,18 @@ if __name__ == '__main__':
     
         
     response = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
-    ip_address_orchestrator=response['Reservations']['Instances'].get('PublicIpAddress')
-
+    ip_address_orchestrator=response['Reservations'][0]['Instances'][0]['PublicIpAddress']
+    print(ip_address_orchestrator)
     # Send requests to orchestrator
-    orchestrator_port=80
+    orchestrator_port=5000
     data='Hello'
     num_requests=5
 
-    print (date.utcnow())
+    info=[ip_address_orchestrator,orchestrator_port,data]
     print('Starting sending requests to orchestrator simultaneously') 
-    send_multiple_requests(ip_address_orchestrator,orchestrator_port,data,num_requests)
+    send_multiple_requests(info,num_requests)
     print('Finished sending requests') 
-    print (date.utcnow())
+    
 
 
 
