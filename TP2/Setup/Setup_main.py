@@ -113,7 +113,13 @@ if __name__ == '__main__':
         json.dump(data,f)
 
     print("\n\n json file updated succesfully \n\n")
+<<<<<<< HEAD
     print('Waiting for deployement of flask application on workers containers ....')
+=======
+    
+    print ("\n Waiting for FaskApps deployement on workers \n")
+    
+>>>>>>> 99dd367f04a1e9ceefbe01131039ad7420040cb4
     time.sleep(330)
 
     print("\n Creating instances : Orchestrator ")
