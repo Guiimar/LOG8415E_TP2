@@ -119,9 +119,10 @@ if __name__ == '__main__':
     print("\n Creating instances : Orchestrator ")
 
     # Creation of the orchestrator
-    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
+    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",'')
 
     print("\n Orchestrator and the 4 workers created successfuly")
+    
 
 
     #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
