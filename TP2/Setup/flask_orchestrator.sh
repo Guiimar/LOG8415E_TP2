@@ -31,11 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-<<<<<<< HEAD
-{"container1": {"ip": "52.91.170.106", "port": "5000", "status": "free"}, "container2": {"ip": "52.91.170.106", "port": "5001", "status": "free"}, "container3": {"ip": "3.91.92.63", "port": "5000", "status": "free"}, "container4": {"ip": "3.91.92.63", "port": "5001", "status": "free"}, "container5": {"ip": "18.232.147.157", "port": "5000", "status": "free"}, "container6": {"ip": "18.232.147.157", "port": "5001", "status": "free"}, "container7": {"ip": "54.89.10.201", "port": "5000", "status": "free"}, "container8": {"ip": "54.89.10.201", "port": "5001", "status": "free"}}
-=======
-{"container1": {"ip": "3.210.204.20", "port": "5000", "status": "free"}, "container2": {"ip": "3.210.204.20", "port": "5001", "status": "free"}, "container3": {"ip": "54.175.13.10", "port": "5000", "status": "free"}, "container4": {"ip": "54.175.13.10", "port": "5001", "status": "free"}, "container5": {"ip": "3.235.137.194", "port": "5000", "status": "free"}, "container6": {"ip": "3.235.137.194", "port": "5001", "status": "free"}, "container7": {"ip": "3.89.215.213", "port": "5000", "status": "free"}, "container8": {"ip": "3.89.215.213", "port": "5001", "status": "free"}}
->>>>>>> 38f1a6b2b80d744be4d5424fa09de4df0abf0022
+{"container1": {"ip": "3.87.63.33", "port": "5000", "status": "free"}, "container2": {"ip": "3.87.63.33", "port": "5001", "status": "free"}, "container3": {"ip": "3.87.235.225", "port": "5000", "status": "free"}, "container4": {"ip": "3.87.235.225", "port": "5001", "status": "free"}, "container5": {"ip": "3.92.189.42", "port": "5000", "status": "free"}, "container6": {"ip": "3.92.189.42", "port": "5001", "status": "free"}, "container7": {"ip": "54.196.200.211", "port": "5000", "status": "free"}, "container8": {"ip": "54.196.200.211", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
@@ -102,23 +98,33 @@ def process_request(incoming_request_data):
         send_request_to_container(
             free_container,data[free_container],incoming_request_data
         )
+        # time.sleep(2)
         update_container_status(free_container,"free")
     else:
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
         request_queue.append(incoming_request_data)    
 
+def process_request_queue(waiting_request):
+    while waiting_request:
+        incoming_request_queue = waiting_request.pop(0)  # Get the oldest request (FIFO)
+        process_request(incoming_request_queue) 
+
 @app.route("/new_request",methods=["POST"])
 def new_request():
     incoming_request_data=""
     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
-    while request_queue:
-        threading.Thread(target=process_request,args=(request_queue,)).start()
+   
     threading.Thread(target=process_request,args=(incoming_request_data,)).start()
+    if request_queue:
+        # threading.Thread(target=process_request,args=(request_queue,)).start()
+        process_request_queue(request_queue)
 
     return jsonify({"message":"Request received and processing started."})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000)
+    print("\n \n -----End-----\n \n ")
+    print("\n \n Please Send Other Requests\n \n ")
 
 EOL
 

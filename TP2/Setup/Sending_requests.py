@@ -52,10 +52,11 @@ if __name__ == '__main__':
         
     response_orch = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
     ip_address_orchestrator=response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
+    print(ip_address_orchestrator)
     # Send requests to orchestrator
     orchestrator_port=5000
     data='Hello'
-    num_requests=10
+    num_requests=20
 
 
     info=[ip_address_orchestrator,orchestrator_port,data]

@@ -114,8 +114,8 @@ if __name__ == '__main__':
 
     print("\n\n json file updated succesfully \n\n")
     
-    print ("\n Waiting for FaskApps deployement on workers \n")
-    
+    print('\n Waiting for deployement of flask application on workers containers ....\n')
+
     time.sleep(330)
 
     print("\n Creating instances : Orchestrator ")
