@@ -57,6 +57,7 @@ if __name__ == '__main__':
     data='Hello'
     num_requests=10
 
+
     info=[ip_address_orchestrator,orchestrator_port,data]
     print('Starting sending requests to orchestrator simultaneously') 
     send_multiple_requests(info,num_requests)
