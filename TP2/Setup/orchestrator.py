@@ -59,6 +59,7 @@ def process_request(incoming_request_data):
         send_request_to_container(
             free_container,data[free_container],incoming_request_data
         )
+        time.sleep(2)
         update_container_status(free_container,"free")
     else:
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
@@ -76,4 +77,6 @@ def new_request():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000)
+    print("\n \n -----End-----\n \n ")
+    print("\n \n Please Send Other Requests\n \n ")
 
