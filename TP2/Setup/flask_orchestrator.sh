@@ -31,7 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "54.160.209.218", "port": "5000", "status": "free"}, "container2": {"ip": "54.160.209.218", "port": "5001", "status": "free"}, "container3": {"ip": "3.95.236.148", "port": "5000", "status": "free"}, "container4": {"ip": "3.95.236.148", "port": "5001", "status": "free"}, "container5": {"ip": "3.90.232.159", "port": "5000", "status": "free"}, "container6": {"ip": "3.90.232.159", "port": "5001", "status": "free"}, "container7": {"ip": "34.235.146.220", "port": "5000", "status": "free"}, "container8": {"ip": "34.235.146.220", "port": "5001", "status": "free"}}
+{"container1": {"ip": "34.200.224.220", "port": "5000", "status": "free"}, "container2": {"ip": "34.200.224.220", "port": "5001", "status": "free"}, "container3": {"ip": "44.201.124.248", "port": "5000", "status": "free"}, "container4": {"ip": "44.201.124.248", "port": "5001", "status": "free"}, "container5": {"ip": "3.239.104.7", "port": "5000", "status": "free"}, "container6": {"ip": "3.239.104.7", "port": "5001", "status": "free"}, "container7": {"ip": "3.90.15.232", "port": "5000", "status": "free"}, "container8": {"ip": "3.90.15.232", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
@@ -122,13 +122,12 @@ def new_request():
     return jsonify({"message":"Request received and processing started."})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
+    app.run(host='0.0.0.0',port=8000)
     print("\n \n -----End-----\n \n ")
     print("\n \n Please Send Other Requests\n \n ")
 
 EOL
 
-python /home/ubuntu/flaskapp/orchestrator.py
 
 # #Install Gunicorn:
 
@@ -162,116 +161,118 @@ python /home/ubuntu/flaskapp/orchestrator.py
 
 # curl localhost:8000
 
-# #Install nginx:
+#Install nginx:
 
-# sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nginx
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nginx
 
-# #Start the Nginx service :
+#Start the Nginx service :
 
-# sudo systemctl start nginx
-# sudo systemctl enable nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
 
-# #Edition of /etc/nginx/sites-available/default in order to add  :
+#Edition of /etc/nginx/sites-available/default in order to add  :
 
-# sudo cat <<EOL > /etc/nginx/sites-available/default
+sudo cat <<EOL > /etc/nginx/sites-available/default
 
-# ##
-# # You should look at the following URL's in order to grasp a solid understanding
-# # of Nginx configuration files in order to fully unleash the power of Nginx.
-# # https://www.nginx.com/resources/wiki/start/
-# # https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
-# # https://wiki.debian.org/Nginx/DirectoryStructure
-# #
-# # In most cases, administrators will remove this file from sites-enabled/ and
-# # leave it as reference inside of sites-available where it will continue to be
-# # updated by the nginx packaging team.
-# #
-# # This file will automatically load configuration files provided by other
-# # applications, such as Drupal or Wordpress. These applications will be made
-# # available underneath a path with that package name, such as /drupal8.
-# #
-# # Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
-# ##
+##
+# You should look at the following URL's in order to grasp a solid understanding
+# of Nginx configuration files in order to fully unleash the power of Nginx.
+# https://www.nginx.com/resources/wiki/start/
+# https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+# https://wiki.debian.org/Nginx/DirectoryStructure
+#
+# In most cases, administrators will remove this file from sites-enabled/ and
+# leave it as reference inside of sites-available where it will continue to be
+# updated by the nginx packaging team.
+#
+# This file will automatically load configuration files provided by other
+# applications, such as Drupal or Wordpress. These applications will be made
+# available underneath a path with that package name, such as /drupal8.
+#
+# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.
+##
 
-# # Default server configuration
-# #
-# upstream flaskhrunninginstance {
-#     server 127.0.0.1:8000;
-# }
-# server {
-#         listen 80 default_server;
-#         listen [::]:80 default_server;
+# Default server configuration
+#
+upstream flaskhrunninginstance {
+    server 127.0.0.1:8000;
+}
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-#         # SSL configuration
-#         #
-#         # listen 443 ssl default_server;
-#         # listen [::]:443 ssl default_server;
-#         #
-#         # Note: You should disable gzip for SSL traffic.
-#         # See: https://bugs.debian.org/773332
-#         #
-#         # Read up on ssl_ciphers to ensure a secure configuration.
-#         # See: https://bugs.debian.org/765782
-#         #
-#         # Self signed certs generated by the ssl-cert package
-#         # Don't use them in a production server!
-#         #
-#         # include snippets/snakeoil.conf;
+        # SSL configuration
+        #
+        # listen 443 ssl default_server;
+        # listen [::]:443 ssl default_server;
+        #
+        # Note: You should disable gzip for SSL traffic.
+        # See: https://bugs.debian.org/773332
+        #
+        # Read up on ssl_ciphers to ensure a secure configuration.
+        # See: https://bugs.debian.org/765782
+        #
+        # Self signed certs generated by the ssl-cert package
+        # Don't use them in a production server!
+        #
+        # include snippets/snakeoil.conf;
 
-#         root /var/www/html;
+        root /var/www/html;
 
-#         # Add index.php to the list if you are using PHP
-#         index index.html index.htm index.nginx-debian.html;
+        # Add index.php to the list if you are using PHP
+        index index.html index.htm index.nginx-debian.html;
 
-#         server_name _;
+        server_name _;
 
-#         location / {
-#                 # First attempt to serve request as file, then
-#                 proxy_pass http://flaskhrunninginstance ;
-#                 # as directory, then fall back to displaying a 404.
-#                 try_files $uri $uri/ =404;
-#         }
+        location / {
+                # First attempt to serve request as file, then
+                proxy_pass http://flaskhrunninginstance ;
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ =404;
+        }
 
-#         # pass PHP scripts to FastCGI server
-#         #
-#         #location ~ \.php$ {
-#         #       include snippets/fastcgi-php.conf;
-#         #
-#         #       # With php-fpm (or other unix sockets):
-#         #       fastcgi_pass unix:/run/php/php7.4-fpm.sock;
-#         #       # With php-cgi (or other tcp sockets):
-#         #       fastcgi_pass 127.0.0.1:9000;
-#         #}
+        # pass PHP scripts to FastCGI server
+        #
+        #location ~ \.php$ {
+        #       include snippets/fastcgi-php.conf;
+        #
+        #       # With php-fpm (or other unix sockets):
+        #       fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        #       # With php-cgi (or other tcp sockets):
+        #       fastcgi_pass 127.0.0.1:9000;
+        #}
 
-#         # deny access to .htaccess files, if Apache's document root
-#         # concurs with nginx's one
-#         #
-#         #location ~ /\.ht {
-#         #       deny all;
-#         #}
-# }
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #       deny all;
+        #}
+}
 
 
-# # Virtual Host configuration for example.com
-# #
-# # You can move that to a different file under sites-available/ and symlink that
-# # to sites-enabled/ to enable it.
-# #
-# #server {
-# #       listen 80;
-# #       listen [::]:80;
-# #
-# #       server_name example.com;
-# #
-# #       root /var/www/example.com;
-# #       index index.html;
-# #
-# #       location / {
-# #               try_files $uri $uri/ =404;
-# #       }
-# #}
-# EOL
+# Virtual Host configuration for example.com
+#
+# You can move that to a different file under sites-available/ and symlink that
+# to sites-enabled/ to enable it.
+#
+#server {
+#       listen 80;
+#       listen [::]:80;
+#
+#       server_name example.com;
+#
+#       root /var/www/example.com;
+#       index index.html;
+#
+#       location / {
+#               try_files $uri $uri/ =404;
+#       }
+#}
+EOL
 
-# #Restart nginx:
+#Restart nginx:
 
-# sudo systemctl restart nginx
+sudo systemctl restart nginx
+
+python /home/ubuntu/flaskapp/orchestrator.py
