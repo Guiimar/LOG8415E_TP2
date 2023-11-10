@@ -48,7 +48,6 @@ lock=threading.Lock()
 request_queue=[]
 path = "/home/ubuntu/flaskapp/"
 results_ml=[]
-#path = ""
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
     print(f"Sending request to {container_id} with data : {incoming_request_data}...")
@@ -57,12 +56,13 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     container_port=container_info["port"]
 
     try:
+        #creation of the url
         url="http://{}:{}/{}".format(container_ip, container_port,'run_model')
-        #post pour transmettre la requête
+        #post to send the request to the container 
         response=requests.post(url,data=incoming_request_data)
     except Exception as e:
         print('Exception returned is',e)
-  
+    
     if response.status_code == 200:
         data = response.json()
         input_text = data['input_text']
@@ -73,7 +73,6 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
         print("La requête a échoué. Code d'état du serveur :", response.status_code)
 
     print(f"Received response from {container_id}")
-
 
 
 def update_container_status(container_id,status):
@@ -130,7 +129,6 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
     print("\n \n -----End-----\n \n ")
     print("\n \n Please Send Other Requests\n \n ")
-    print(results_ml)
 
 EOL
 
