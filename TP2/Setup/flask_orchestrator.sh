@@ -1,28 +1,18 @@
 #!/bin/bash
-
 #Install Python Virtualenv
-
 sudo apt-get -y update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -y python3-venv 
 
-#Create directory
-
-# if [ -d "flaskapp" ]; then
-#   sudo rm -rf flaskapp
-# fi 
-
+# Create a flaskapp directory
 mkdir /home/ubuntu/flaskapp && cd /home/ubuntu/flaskapp 
 
 #Create the virtual environment
-
 python3 -m venv venv
 
 #Activate the virtual environment
-
 source venv/bin/activate
 
 #Install Flask
-# pip install --upgrade pip
 pip install Flask
 pip install jsons
 pip install flask-restful
@@ -34,8 +24,7 @@ cat <<EOL > /home/ubuntu/flaskapp/test.json
 {"container1": {"ip": "44.200.198.58", "port": "5000", "status": "free"}, "container2": {"ip": "44.200.198.58", "port": "5001", "status": "free"}, "container3": {"ip": "34.201.128.206", "port": "5000", "status": "free"}, "container4": {"ip": "34.201.128.206", "port": "5001", "status": "free"}, "container5": {"ip": "3.236.193.52", "port": "5000", "status": "free"}, "container6": {"ip": "3.236.193.52", "port": "5001", "status": "free"}, "container7": {"ip": "3.85.228.165", "port": "5000", "status": "free"}, "container8": {"ip": "3.85.228.165", "port": "5001", "status": "free"}}
 EOL
 
-#Create of a simple Flask app:
-
+#Create the orchestrator flask app:
 cat <<EOL > /home/ubuntu/flaskapp/orchestrator.py
 from flask import Flask,request,jsonify
 import threading
@@ -139,51 +128,14 @@ if __name__ == '__main__':
    
 
 EOL
-
-
-# #Install Gunicorn:
-
-# pip install gunicorn
-
-# #Create a file system containing service instructions:
-
-# sudo cat <<EOL > /etc/systemd/system/flaskapp.service
-# [Unit]
-# Description=None
-# After=network.target
-
-# [Service]
-# User=ubuntu
-# Group=www-data
-# WorkingDirectory=/home/ubuntu/flaskapp
-# ExecStart=/home/ubuntu/flaskapp/venv/bin/gunicorn -b localhost:8000 orchestrator:app
-# Restart=always
-
-# [Install]
-# WantedBy=multi-user.target
-# EOL
-
-# #Enable the service:
-
-# sudo systemctl daemon-reload
-# sudo systemctl start flaskapp
-# sudo systemctl enable flaskapp
-
-# #Check the app is running using:
-
-# curl localhost:8000
-
-#Install nginx:
-
+# install the nginx in order to use the reverse proxy :
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nginx
 
 #Start the Nginx service :
-
 sudo systemctl start nginx
 sudo systemctl enable nginx
 
-#Edition of /etc/nginx/sites-available/default in order to add  :
-
+#Modifying /etc/nginx/sites-available/default in order to map the port 80 with the flask app :
 sudo cat <<EOL > /etc/nginx/sites-available/default
 
 ##
@@ -284,7 +236,6 @@ server {
 EOL
 
 #Restart nginx:
-
 sudo systemctl restart nginx
 
 python /home/ubuntu/flaskapp/orchestrator.py
