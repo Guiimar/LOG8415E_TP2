@@ -50,7 +50,7 @@ path = "/home/ubuntu/flaskapp/"
 results_ml=[]
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
-    print(f"Sending request to {container_id} with data : {incoming_request_data}...")
+    print(f"\n\nSending request to {container_id} with data : {incoming_request_data}...")
 
     container_ip=container_info["ip"]
     container_port=container_info["port"]
@@ -72,7 +72,7 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     else:
         print("La requête a échoué. Code d'état du serveur :", response.status_code)
 
-    print(f"Received response from {container_id}")
+    print(f"Received response from {container_id}\n\n")
 
 
 def update_container_status(container_id,status):
@@ -127,8 +127,6 @@ def get_results():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=8000)
-    print("\n \n -----End-----\n \n ")
-    print("\n \n Please Send Other Requests\n \n ")
 
 EOL
 
