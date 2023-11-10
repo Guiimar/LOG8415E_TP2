@@ -48,7 +48,7 @@ if __name__ == '__main__':
     path = os.path.dirname(os.getcwd())
     #path=path+"\TP2"
     config_object = configparser.ConfigParser()
-    with open(path+"\credentials.ini","r") as file_object:
+    with open(path+"/credentials.ini","r") as file_object:
         config_object.read_file(file_object)
         key_id = config_object.get("resource","aws_access_key_id")
         access_key = config_object.get("resource","aws_secret_access_key")
@@ -63,8 +63,10 @@ if __name__ == '__main__':
     
         
     response_orch = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
-    ip_address_orchestrator = response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
-    orchestrator_port=5000
+    ip_address_orchestrator=response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
+    print(ip_address_orchestrator)
+    # Send requests to orchestrator
+    orchestrator_port=80
     data='Hello'
     num_requests=5
 
