@@ -36,7 +36,6 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     print(f"Received response from {container_id}")
 
 
-
 def update_container_status(container_id,status):
     with lock:
         with open(path+"test.json","r") as f:
@@ -84,7 +83,7 @@ def new_request():
     return jsonify({"message":"Request received and processing started."})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000)
+    app.run(host='0.0.0.0',port=8000)
     print("\n \n -----End-----\n \n ")
     print("\n \n Please Send Other Requests\n \n ")
 
