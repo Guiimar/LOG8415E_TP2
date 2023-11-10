@@ -62,14 +62,12 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
         response=requests.post(url,data=incoming_request_data)
     except Exception as e:
         print('Exception returned is',e)
-
-    #Code pour voir la réponse   
+  
     if response.status_code == 200:
         data = response.json()
         input_text = data['input_text']
         probabilities = data['probabilities']
-        print("Input Text:", input_text)
-        print("Probabilities:", probabilities)
+        # add the result of the request in the list of results
         results_ml.append(data)
     else:
         print("La requête a échoué. Code d'état du serveur :", response.status_code)
@@ -123,6 +121,7 @@ def new_request():
 
     return jsonify({"message":"Request received and processing started."})
 
+# add a new route to get the results of the requests 
 @app.route("/get_results",methods=["GET"])
 def get_results():
  return(results_ml)
