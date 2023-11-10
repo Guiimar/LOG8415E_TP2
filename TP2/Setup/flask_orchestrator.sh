@@ -31,7 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "54.160.209.218", "port": "5000", "status": "free"}, "container2": {"ip": "54.160.209.218", "port": "5001", "status": "free"}, "container3": {"ip": "3.95.236.148", "port": "5000", "status": "free"}, "container4": {"ip": "3.95.236.148", "port": "5001", "status": "free"}, "container5": {"ip": "3.90.232.159", "port": "5000", "status": "free"}, "container6": {"ip": "3.90.232.159", "port": "5001", "status": "free"}, "container7": {"ip": "34.235.146.220", "port": "5000", "status": "free"}, "container8": {"ip": "34.235.146.220", "port": "5001", "status": "free"}}
+{"container1": {"ip": "23.20.82.24", "port": "5000", "status": "free"}, "container2": {"ip": "23.20.82.24", "port": "5001", "status": "free"}, "container3": {"ip": "54.165.99.246", "port": "5000", "status": "free"}, "container4": {"ip": "54.165.99.246", "port": "5001", "status": "free"}, "container5": {"ip": "54.158.41.20", "port": "5000", "status": "free"}, "container6": {"ip": "54.158.41.20", "port": "5001", "status": "free"}, "container7": {"ip": "54.198.65.120", "port": "5000", "status": "free"}, "container8": {"ip": "54.198.65.120", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
@@ -47,6 +47,7 @@ app=Flask(__name__)
 lock=threading.Lock()
 request_queue=[]
 path = "/home/ubuntu/flaskapp/"
+results_ml=[]
 #path = ""
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
@@ -69,6 +70,7 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
         probabilities = data['probabilities']
         print("Input Text:", input_text)
         print("Probabilities:", probabilities)
+        results_ml.append(data)
     else:
         print("La requête a échoué. Code d'état du serveur :", response.status_code)
 
@@ -121,10 +123,15 @@ def new_request():
 
     return jsonify({"message":"Request received and processing started."})
 
+@app.route("/get_results",methods=["GET"])
+def get_results():
+ return(results_ml)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000)
     print("\n \n -----End-----\n \n ")
     print("\n \n Please Send Other Requests\n \n ")
+    print(results_ml)
 
 EOL
 

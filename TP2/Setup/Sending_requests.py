@@ -14,6 +14,18 @@ def send_request_to_orchestrator(info):
         url="http://{}:{}/{}".format(ip, port,'new_request')
         #post pour transmettre la requête
         response=requests.post(url,data=data)
+        print("test")
+        print(response.json())
+    except Exception as e:
+        print('Exception returned is',e)
+
+#Function to send request (to orchestrator)
+def send_request_results(ip,port):
+    try:
+        url="http://{}:{}/{}".format(ip, port,'get_results')
+        #post pour transmettre la requête
+        response=requests.get(url)
+        print(response.text)
     except Exception as e:
         print('Exception returned is',e)
 
@@ -51,18 +63,16 @@ if __name__ == '__main__':
     
         
     response_orch = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
-    ip_address_orchestrator=response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
-    print(ip_address_orchestrator)
-    # Send requests to orchestrator
+    ip_address_orchestrator = response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
     orchestrator_port=5000
     data='Hello'
-    num_requests=20
-
+    num_requests=5
 
     info=[ip_address_orchestrator,orchestrator_port,data]
     print('Starting sending requests to orchestrator simultaneously') 
     send_multiple_requests(info,num_requests)
-    print('Finished sending requests') 
+    print('Finished sending requests')
+    send_request_results(ip_address_orchestrator,orchestrator_port)
     
 
 
