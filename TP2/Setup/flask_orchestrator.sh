@@ -31,7 +31,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "23.20.82.24", "port": "5000", "status": "free"}, "container2": {"ip": "23.20.82.24", "port": "5001", "status": "free"}, "container3": {"ip": "54.165.99.246", "port": "5000", "status": "free"}, "container4": {"ip": "54.165.99.246", "port": "5001", "status": "free"}, "container5": {"ip": "54.158.41.20", "port": "5000", "status": "free"}, "container6": {"ip": "54.158.41.20", "port": "5001", "status": "free"}, "container7": {"ip": "54.198.65.120", "port": "5000", "status": "free"}, "container8": {"ip": "54.198.65.120", "port": "5001", "status": "free"}}
+{"container1": {"ip": "44.200.198.58", "port": "5000", "status": "free"}, "container2": {"ip": "44.200.198.58", "port": "5001", "status": "free"}, "container3": {"ip": "34.201.128.206", "port": "5000", "status": "free"}, "container4": {"ip": "34.201.128.206", "port": "5001", "status": "free"}, "container5": {"ip": "3.236.193.52", "port": "5000", "status": "free"}, "container6": {"ip": "3.236.193.52", "port": "5001", "status": "free"}, "container7": {"ip": "3.85.228.165", "port": "5000", "status": "free"}, "container8": {"ip": "3.85.228.165", "port": "5001", "status": "free"}}
 EOL
 
 #Create of a simple Flask app:
@@ -51,7 +51,6 @@ results_ml=[]
 
 def send_request_to_container(container_id,container_info,incoming_request_data):
     print(f"\n\nSending request to {container_id} with data : {incoming_request_data}...")
-
     container_ip=container_info["ip"]
     container_port=container_info["port"]
 
@@ -72,7 +71,8 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
     else:
         print("La requête a échoué. Code d'état du serveur :", response.status_code)
 
-    print(f"Received response from {container_id}\n\n")
+    print(f"Received response from {container_id}\n\n") 
+    return data
 
 
 def update_container_status(container_id,status):
@@ -83,7 +83,7 @@ def update_container_status(container_id,status):
         with open (path+"test.json","w") as f:
             json.dump(data,f)
 
-def process_request(incoming_request_data):
+def process_request(incoming_request_data, list_of_return):
     with lock:
         with open(path+"test.json","r") as f:
             data=json.load(f)
@@ -94,39 +94,49 @@ def process_request(incoming_request_data):
             break
     if free_container:
         update_container_status(free_container,"busy")
-        send_request_to_container(
+        sd = send_request_to_container(
             free_container,data[free_container],incoming_request_data
         )
+        list_of_return.append(sd)
         # time.sleep(2)
         update_container_status(free_container,"free")
     else:
         #### Les requetes sont dans la queue QUE FAIRE POUR LES TRAITER
         request_queue.append(incoming_request_data)    
+    return list_of_return
 
-def process_request_queue(waiting_request):
+def process_request_queue(waiting_request, list_of_return):
     while waiting_request:
         incoming_request_queue = waiting_request.pop(0)  # Get the oldest request (FIFO)
-        process_request(incoming_request_queue) 
+        process_request(incoming_request_queue, list_of_return) 
 
 @app.route("/new_request",methods=["POST"])
 def new_request():
+    list_of_return = []
     incoming_request_data=""
     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
-   
-    threading.Thread(target=process_request,args=(incoming_request_data,)).start()
+    th = threading.Thread(target=process_request,args=(incoming_request_data, list_of_return))
+    th.start()
+    # In order to wait the completion of the thread
+    th.join()
+
     if request_queue:
         # threading.Thread(target=process_request,args=(request_queue,)).start()
-        process_request_queue(request_queue)
+        process_request_queue(request_queue, list_of_return)
+    
+    return list_of_return
+
 
     return jsonify({"message":"Request received and processing started."})
 
 # add a new route to get the results of the requests 
 @app.route("/get_results",methods=["GET"])
 def get_results():
- return(results_ml)
+    return(results_ml)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=8000)
+    app.run(host='0.0.0.0',port=5000)
+   
 
 EOL
 
@@ -197,7 +207,7 @@ sudo cat <<EOL > /etc/nginx/sites-available/default
 # Default server configuration
 #
 upstream flaskhrunninginstance {
-    server 127.0.0.1:8000;
+    server 127.0.0.1:5000;
 }
 server {
         listen 80 default_server;
