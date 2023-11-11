@@ -148,4 +148,21 @@ def update_orchestrator_sh(ud_orchestrator):
     with open('flask_orchestrator.sh', 'w') as file:
         file.write(ud_orchestrator)
     return(print("\n Updated flask_orchestrator with the new containers ip "))
+
+def update_test_json(workers_m4):
+    # Modifier le fichier test.json en fonction pour modifier les IP
+    with open("test.json","r") as f:
+            data=json.load(f)
+
+    # Modify the ip in the test.json
+    container_count = 0
+    for i in range(len(workers_m4)):
+        # Get one worker and map it to two containers with different ports :port 5000 and 5001
+        for _ in range(2):
+            container_count += 1
+            container_id = "container" + str(container_count)
+            data[container_id]["ip"]=workers_m4[i][1]
+    with open ("test.json","w") as f:
+        json.dump(data,f)
     
+    return(print("\n\n json file updated successfully \n\n"))

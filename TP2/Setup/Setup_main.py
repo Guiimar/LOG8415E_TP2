@@ -98,26 +98,12 @@ if __name__ == '__main__':
     # Creation of the 4 workers
     workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
 
-    # Modifier le fichier test.json en fonction pour modifier les IP
-    with open("test.json","r") as f:
-            data=json.load(f)
-
-    # Modify the ip in the test.json
-    container_count = 0
-    for i in range(len(workers_m4)):
-        # Get one worker and map it to two containers with different ports :port 5000 and 5001
-        for _ in range(2):
-            container_count += 1
-            container_id = "container" + str(container_count)
-            data[container_id]["ip"]=workers_m4[i][1]
-    with open ("test.json","w") as f:
-        json.dump(data,f)
-
-    print("\n\n json file updated successfully \n\n")
+    #Update test.json with the new workers ip
+    update_test_json(workers_m4)
     
     print('\n Waiting for deployement of flask application on workers containers ....\n')
 
-    time.sleep(330)
+    #time.sleep(330)
     
     #modify the flask_orchestrator.sh fike with the new containers ip
     update_orchestrator_sh(ud_orchestrator)
