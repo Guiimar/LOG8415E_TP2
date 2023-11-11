@@ -4,6 +4,7 @@ import multiprocessing
 import configparser
 import os
 from datetime import date
+import time
 
 #Function to send request (to orchestrator)
 def send_request_to_orchestrator(info):
@@ -15,11 +16,14 @@ def send_request_to_orchestrator(info):
         #post pour transmettre la requête
         response=requests.post(url,data=data)
         #print("test")
-        ls = response.json()
-        input_text_value = ls[0]['input_text']
-        probabilities_value = ls[0]['probabilities']
-        print("\n\nInput Text:", input_text_value)
-        print("Probabilities:", probabilities_value)
+        if response.json() != None:
+            ls = response.json()
+            print("\n",ls[0])
+            # l = ls[0]
+            # input_text_value = l.get('input_text')
+            # probabilities_value = l.get('probabilities')
+            # print("\n\nInput Text:", input_text_value)
+            # print("Probabilities:", probabilities_value)
 
     except Exception as e:
         print('Exception returned is',e)
@@ -36,12 +40,12 @@ def send_request_results(ip,port):
 
 def send_multiple_requests(info,num_requests):
     # Create a pool to distribute tasks among multiple processes :
-    print('Ok')
+    # print('Ok')
     pool = multiprocessing.Pool(processes=num_requests)
-    print('Ok')
+    # print('Ok')
     # use a pool of worker processes to send multiple HTTP requests simultaneously :
     pool.map(send_request_to_orchestrator, [info]*num_requests)
-    print('Ok')
+    # print('Ok')
     # Desable any other incoming request
     pool.close()
     # block running until all requests are executed 
@@ -52,25 +56,25 @@ if __name__ == '__main__':
     # Get credentials from the config file :
     path = os.path.dirname(os.getcwd())
     #path=path+"\TP2"
-    config_object = configparser.ConfigParser()
-    with open(path+"/credentials.ini","r") as file_object:
-        config_object.read_file(file_object)
-        key_id = config_object.get("resource","aws_access_key_id")
-        access_key = config_object.get("resource","aws_secret_access_key")
-        session_token = config_object.get("resource","aws_session_token")
+    # config_object = configparser.ConfigParser()
+    # with open(path+"/credentials.ini","r") as file_object:
+    #     config_object.read_file(file_object)
+    #     key_id = config_object.get("resource","aws_access_key_id")
+    #     access_key = config_object.get("resource","aws_secret_access_key")
+    #     session_token = config_object.get("resource","aws_session_token")
 
-    # Get ip address of Orchestrator
-    ec2_serviceclient = boto3.client('ec2',
-                        'us-east-1',
-                        aws_access_key_id= key_id,
-                        aws_secret_access_key=access_key ,
-                        aws_session_token= session_token) 
+    # # Get ip address of Orchestrator
+    # ec2_serviceclient = boto3.client('ec2',
+    #                     'us-east-1',
+    #                     aws_access_key_id= key_id,
+    #                     aws_secret_access_key=access_key ,
+    #                     aws_session_token= session_token) 
     
         
-    response_orch = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
-    # ip_address_orchestrator=response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
-    ip_address_orchestrator = "3.239.78.129"
-    print(ip_address_orchestrator)
+    # response_orch = ec2_serviceclient.describe_instances(Filters=[{'Name': 'tag:Name', 'Values': ['lab2-orchestrator-1']}])
+    # # ip_address_orchestrator=response_orch["Reservations"][0]["Instances"][0]["PublicIpAddress"]
+    ip_address_orchestrator = "3.236.202.83"
+    # print(ip_address_orchestrator)
     # Send requests to orchestrator
     orchestrator_port=80
     data='Hello'
