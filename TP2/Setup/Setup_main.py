@@ -98,68 +98,21 @@ if __name__ == '__main__':
     # Creation of the 4 workers
     workers_m4= create_instance_ec2(4,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"worker",ud_workers)
 
-    # Modifier le fichier test.json en fonction pour modifier les IP
-    with open("test.json","r") as f:
-            data=json.load(f)
-
-    # Modify the ip in the test.json
-    container_count = 0
-    for i in range(len(workers_m4)):
-        # Get one worker and map it to two containers with different ports :port 5000 and 5001
-        for _ in range(2):
-            container_count += 1
-            container_id = "container" + str(container_count)
-            data[container_id]["ip"]=workers_m4[i][1]
-    with open ("test.json","w") as f:
-        json.dump(data,f)
-
-    print("\n\n json file updated succesfully \n\n")
+    #Update test.json with the new workers ip
+    update_test_json(workers_m4)
     
     print('\n Waiting for deployement of flask application on workers containers ....\n')
 
-    time.sleep(330)
+    #time.sleep(330)
+    
+    #modify the flask_orchestrator.sh fike with the new containers ip
+    update_orchestrator_sh(ud_orchestrator)
 
     print("\n Creating instances : Orchestrator ")
-
-    ##Once the test json is updated (with new ip), modify automatically the IP in orchestrator_user data 
-    with open("test.json","r") as f:
-            data=json.load(f)
-    #get the modified IP
-    new_ip=str(data)
-    new_ip=new_ip.replace("'", '"')
-    #Get the content of the old test.json content  in the previous user id
-    pattern = re.compile(r'test\.json\n(.*?)\nEOL', re.DOTALL)
-    result = re.search(pattern, ud_orchestrator)
-    old_ip = result.group(1)
-
-    #Replace the content of the updated ip in the ud_orchestrator
-    ud_orchestrator=ud_orchestrator.replace(old_ip,new_ip)
-    #Rewrite the updated file 
-    with open('flask_orchestrator.sh', 'w') as file:
-        file.write(ud_orchestrator)
-
-    print("\n flask_orchestrator with the new containers ip ")
 
     # Creation of the orchestrator
     orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator","")
 
-    print("\n Orchestrator and the 4 workers created successfuly")
-    
-
-
-    #----------------------------Get mapping between availability zones and Ids of default vpc subnets -------------------------------
-
-    #Get the standard subnets discription from the default VPC :
-    subnets_discription= ec2_serviceclient.describe_subnets(Filters=[
-         {
-            'Name': 'vpc-id',
-            'Values': [
-                vpc_id,
-            ]
-        }
-    ])
-    #Get mapping dictionary between Availability zones and subnets Ids
-    mapping_AZ_subnetid={subnet['AvailabilityZone']:subnet['SubnetId'] for subnet in subnets_discription['Subnets']}
-    
+    print("\n Orchestrator and the 4 workers created successfully")
     
     print('============================>SETUP ends')

@@ -21,7 +21,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "54.147.45.75", "port": "5000", "status": "free"}, "container2": {"ip": "54.147.45.75", "port": "5001", "status": "free"}, "container3": {"ip": "3.81.17.82", "port": "5000", "status": "free"}, "container4": {"ip": "3.81.17.82", "port": "5001", "status": "free"}, "container5": {"ip": "54.227.35.192", "port": "5000", "status": "free"}, "container6": {"ip": "54.227.35.192", "port": "5001", "status": "free"}, "container7": {"ip": "34.239.131.98", "port": "5000", "status": "free"}, "container8": {"ip": "34.239.131.98", "port": "5001", "status": "free"}}
+{"container1": {"ip": "18.212.85.83", "port": "5000", "status": "free"}, "container2": {"ip": "18.212.85.83", "port": "5001", "status": "free"}, "container3": {"ip": "54.196.95.221", "port": "5000", "status": "free"}, "container4": {"ip": "54.196.95.221", "port": "5001", "status": "free"}, "container5": {"ip": "54.90.244.145", "port": "5000", "status": "free"}, "container6": {"ip": "54.90.244.145", "port": "5001", "status": "free"}, "container7": {"ip": "54.198.216.188", "port": "5000", "status": "free"}, "container8": {"ip": "54.198.216.188", "port": "5001", "status": "free"}}
 EOL
 
 #Create the orchestrator flask app:
