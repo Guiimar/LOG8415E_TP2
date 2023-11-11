@@ -21,7 +21,7 @@ pip install ec2_metadata
 
 #Create json file that will cointain the IP addresses and port of cointainers:
 cat <<EOL > /home/ubuntu/flaskapp/test.json
-{"container1": {"ip": "44.200.198.58", "port": "5000", "status": "free"}, "container2": {"ip": "44.200.198.58", "port": "5001", "status": "free"}, "container3": {"ip": "34.201.128.206", "port": "5000", "status": "free"}, "container4": {"ip": "34.201.128.206", "port": "5001", "status": "free"}, "container5": {"ip": "3.236.193.52", "port": "5000", "status": "free"}, "container6": {"ip": "3.236.193.52", "port": "5001", "status": "free"}, "container7": {"ip": "3.85.228.165", "port": "5000", "status": "free"}, "container8": {"ip": "3.85.228.165", "port": "5001", "status": "free"}}
+{"container1": {"ip": "54.147.45.75", "port": "5000", "status": "free"}, "container2": {"ip": "54.147.45.75", "port": "5001", "status": "free"}, "container3": {"ip": "3.81.17.82", "port": "5000", "status": "free"}, "container4": {"ip": "3.81.17.82", "port": "5001", "status": "free"}, "container5": {"ip": "54.227.35.192", "port": "5000", "status": "free"}, "container6": {"ip": "54.227.35.192", "port": "5001", "status": "free"}, "container7": {"ip": "34.239.131.98", "port": "5000", "status": "free"}, "container8": {"ip": "34.239.131.98", "port": "5001", "status": "free"}}
 EOL
 
 #Create the orchestrator flask app:
@@ -55,6 +55,8 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
         data = response.json()
         input_text = data['input_text']
         probabilities = data['probabilities']
+        print('Input text=',input_text)
+        print('probabilities=',probabilities)
         # add the result of the request in the list of results
         results_ml.append(data)
     else:
@@ -104,6 +106,7 @@ def new_request():
     list_of_return = []
     incoming_request_data=""
     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
+    
     th = threading.Thread(target=process_request,args=(incoming_request_data, list_of_return))
     th.start()
     # In order to wait the completion of the thread
@@ -125,6 +128,7 @@ def get_results():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000)
+   
    
 
 EOL

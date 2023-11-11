@@ -27,6 +27,8 @@ def send_request_to_container(container_id,container_info,incoming_request_data)
         data = response.json()
         input_text = data['input_text']
         probabilities = data['probabilities']
+        print('Input text=',input_text)
+        print('probabilities=',probabilities)
         # add the result of the request in the list of results
         results_ml.append(data)
     else:
@@ -76,6 +78,7 @@ def new_request():
     list_of_return = []
     incoming_request_data=""
     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
+    
     th = threading.Thread(target=process_request,args=(incoming_request_data, list_of_return))
     th.start()
     # In order to wait the completion of the thread
