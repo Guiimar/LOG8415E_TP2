@@ -135,9 +135,33 @@ def get_results():
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000)
    
-   
-
 EOL
+
+#Install Gunicorn:
+pip install gunicorn
+
+#Create a file system containing service instructions:
+sudo cat <<EOL > /etc/systemd/system/flaskapp.service
+[Unit]
+Description=None
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/flaskapp
+ExecStart=/home/ubuntu/flaskapp/venv/bin/gunicorn -b localhost:5000 orchestrator:app
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOL
+
+#Enable the flask service after reloading all the running services in the background:
+sudo systemctl daemon-reload
+sudo systemctl start flaskapp
+sudo systemctl enable flaskapp
+
 # install the nginx in order to use the reverse proxy :
 sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nginx
 
@@ -248,5 +272,5 @@ EOL
 #Restart nginx:
 sudo systemctl restart nginx
 
-# launching the flask app in the server:
-python /home/ubuntu/flaskapp/orchestrator.py
+# # launching the flask app in the server:
+# python /home/ubuntu/flaskapp/orchestrator.py
