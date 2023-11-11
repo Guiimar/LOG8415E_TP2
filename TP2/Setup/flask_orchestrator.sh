@@ -102,7 +102,7 @@ def process_request(incoming_request_data, list_of_return):
 #The function that process the requests in the queue:
 def process_request_queue(waiting_request, list_of_return):
     while waiting_request:
-        incoming_request_queue = waiting_request.pop(0)  # Get the oldest request (FIFO)
+        incoming_request_queue = waiting_request.pop(0)
         process_request(incoming_request_queue, list_of_return) 
 
 @app.route("/new_request",methods=["POST"])
