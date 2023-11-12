@@ -1,6 +1,6 @@
 # LOG8415E_TP2
 
-This repository is for Lab assignment about Deploying Webapps executing ML models on Containers on AWS
+This repository is for Lab assignment 2 about Deploying Webapps executing ML models on Containers on AWS
 
 Presented by :
 - Mehdi Belchiti
