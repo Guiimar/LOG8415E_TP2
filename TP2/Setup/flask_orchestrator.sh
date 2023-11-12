@@ -111,18 +111,14 @@ def new_request():
     incoming_request_data=""
     # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
 
+    while request_queue :
+        process_request_queue(request_queue, list_of_return)
+    # Si les requetes sont dans la queue, mettre une gestion FIFO des ancieenes & nouvelles requetes
     th = threading.Thread(target=process_request,args=(incoming_request_data, list_of_return))
     th.start()
     # In order to wait the completion of the thread
     th.join()
 
-    if request_queue:
-        # threading.Thread(target=process_request,args=(request_queue,)).start()
-        th = threading.Thread(target=process_request_queue,args=(request_queue, list_of_return))
-        th.start()
-        # In order to wait the completion of the thread
-        th.join()
-    
     return list_of_return
 
     # return jsonify({"message":"Request received and processing started."})
