@@ -86,7 +86,7 @@ if __name__ == '__main__':
         flask_script_worker = f.read()
 
     ud_workers = str(flask_script_worker)
-    
+    ud_orchestrator=''
 
     #--------------------------------------Create Instances of orchestrator and workers ------------------------------------------------------------
 
@@ -101,6 +101,7 @@ if __name__ == '__main__':
     #Update test.json with the new workers ip
     update_test_json(workers_m4)
     
+    time.sleep(330)
     print('\n Waiting for deployement of flask application on workers containers ....\n')
     
     #Modify the flask_orchestrator.sh file with the new containers ip
@@ -109,7 +110,7 @@ if __name__ == '__main__':
     print("\n Creating instances : Orchestrator ")
 
     # Creation of the orchestrator
-    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator","")
+    orchestrator_m4=create_instance_ec2(1,ami_id, instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons_Cluster1,"orchestrator",ud_orchestrator)
 
     print("\n Orchestrator and the 4 workers created successfully")
     
