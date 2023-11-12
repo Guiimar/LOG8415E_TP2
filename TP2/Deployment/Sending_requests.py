@@ -16,15 +16,8 @@ def send_request_to_orchestrator(info):
         url="http://{}:{}/{}".format(ip, port,'new_request')
         # Sending the request
         response=requests.post(url,data=data)
-        if response.json() != None:
-            ls = response.json()
-            print("\n",ls[0])
-            # l = ls[0]
-            # input_text_value = l.get('input_text')
-            # probabilities_value = l.get('probabilities')
-            # print("\n\nInput Text:", input_text_value)
-            # print("Probabilities:", probabilities_value)
-
+        ls = response.json()
+        print(ls)
     except Exception as e:
         print('Exception returned is',e)
 
