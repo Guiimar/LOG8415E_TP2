@@ -16,6 +16,7 @@ def send_request_to_orchestrator(info):
         url="http://{}:{}/{}".format(ip, port,'new_request')
         # Sending the request
         response=requests.post(url,data=data)
+        #get and print the result
         ls = response.json()
         print(ls)
     except Exception as e:
@@ -80,6 +81,7 @@ if __name__ == '__main__':
     print('Starting sending requests to orchestrator simultaneously') 
     send_multiple_requests(info,num_requests)
     print('Finished sending requests')
+    #If you want to see all the requests processed by the containers decode the line
     #send_request_results(ip_address_orchestrator,orchestrator_port)
     
 
