@@ -10,10 +10,10 @@ Presented by :
 
 Before running the script.sh code, please make sure that :
 
-You have already installed Python 3 or above.
-You have already upgraded pip.
-You have already installed Docker.
-You have an AWS account  in order to fill in the lines ( aws_access_key_id,aws_secret_access_key,aws_session_token) in the script.sh file with your credentials.
+- You have already installed Python 3 or above.
+- You have already upgraded pip.
+- You have already installed Docker.
+- You have an AWS account  in order to fill in the lines ( aws_access_key_id,aws_secret_access_key,aws_session_token) in the script.sh file with your credentials.
 
 Then, by running the script.sh code, you will clone the github repository of the assignment, and then run two codes below from github repository:
 
