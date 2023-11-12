@@ -69,11 +69,6 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
              'IpProtocol':'tcp',
              'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
             },
-            {'FromPort':443,
-             'ToPort':443,
-             'IpProtocol':'tcp',
-             'IpRanges':[{'CidrIp':'0.0.0.0/0'}]
-            },
             {'FromPort':5000,
              'ToPort':5000,
              'IpProtocol':'tcp',
@@ -91,7 +86,7 @@ def create_security_group(Description,Groupe_name,vpc_id,resource):
 #------------------------------------------------End----------------------------------------------------
 
 
-#Function to create ec2 instances :  The function a list containing the [id of instance,public_ip_address]
+#Function to create ec2 instances :  The function returns a list containing the [id of instance,public_ip_address]
 
 def create_instance_ec2(num_instances,ami_id,
     instance_type,key_pair_name,ec2_serviceresource,security_group_id,Availabilityzons,instance_function,user_data):
@@ -128,8 +123,7 @@ def create_instance_ec2(num_instances,ami_id,
         print ('Instance: '+str(instance_function)+str(i+1),' having the Id: ',instance[0].id,'and having the ip',public_ip,' in Availability Zone: ', Availabilityzons[i], 'is created')
     return instances
 
-#Function to automatically update the ip of the workers in the script.sh
-
+#Function to automatically update the ip of the workers in the flask_orchestrator.sh file
 def update_orchestrator_sh(ud_orchestrator):
     ##Once the test json is updated (with new ip), modify automatically the IP in orchestrator_user data 
     with open("test.json","r") as f:
@@ -137,7 +131,7 @@ def update_orchestrator_sh(ud_orchestrator):
     #get the modified IP
     new_ip=str(data)
     new_ip=new_ip.replace("'", '"')
-    #Get the content of the old test.json content  in the previous user id
+    #Get the content of the old test.json content in the previous user id
     pattern = re.compile(r'test\.json\n(.*?)\nEOL', re.DOTALL)
     result = re.search(pattern, ud_orchestrator)
     old_ip = result.group(1)
@@ -149,8 +143,9 @@ def update_orchestrator_sh(ud_orchestrator):
         file.write(ud_orchestrator)
     return(print("\n Updated flask_orchestrator with the new containers ip "))
 
+#Function to automatically update the ip of the workers in the test.json file
 def update_test_json(workers_m4):
-    # Modifier le fichier test.json en fonction pour modifier les IP
+    # Modify the file test.json en fonction pour modifier les IP
     with open("test.json","r") as f:
             data=json.load(f)
 
