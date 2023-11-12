@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
     #time.sleep(330)
     
-    #modify the flask_orchestrator.sh fike with the new containers ip
+    #modify the flask_orchestrator.sh file with the new containers ip
     update_orchestrator_sh(ud_orchestrator)
 
     print("\n Creating instances : Orchestrator ")
@@ -116,3 +116,5 @@ if __name__ == '__main__':
     print("\n Orchestrator and the 4 workers created successfully")
     
     print('============================>SETUP ends')
+
+
